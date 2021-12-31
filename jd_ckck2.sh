@@ -2,8 +2,9 @@
 
 ## Build 20211230-001-fix-test
 
-#京东小魔方--收集兑换
-# 23 22 * * * jd _ckck2.sh, tag=shell版ck检测
+# shell版ck检测
+# 23 22 * * * jd _ckck2.sh, tag=shell版ck检测 #
+
 ## 导入通用变量与函数
 dir_shell=/ql/shell
 . $dir_shell/share.sh
