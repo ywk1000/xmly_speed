@@ -26,7 +26,7 @@ if ($.isNode()) {
 }
 rebateCodes = $.isNode() ? (process.env.gua_redEnvelope_rebateCode ? process.env.gua_redEnvelope_rebateCode : `${rebateCodes}`) : ($.getdata('gua_redEnvelope_rebateCode') ? $.getdata('gua_redEnvelope_rebateCode') : `${rebateCodes}`);
 
-rebateCode = ''
+rebateCode = 'SLI8zFT'
 message = ''
 newCookie = ''
 resMsg = ''
