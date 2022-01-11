@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## Build 20220104-001-test
+## Build 20220110-001-test
 
 ## 导入通用变量与函数
 dir_shell=/ql/shell
@@ -131,6 +131,51 @@ WxPusher_notify_api() {
     )
 }
 
+## 获取用户昵称 API
+Get_NickName() {
+    local currentTimeStamp=$(date +%s)
+    local cookie=$1
+    local url_1="https://me-api.jd.com/user_new/info/GetJDUserInfoUnion"
+    local url_2="https://wxapp.m.jd.com/kwxhome/myJd/home.json?&useGuideModule=0&bizId=&brandId=&fromType=wxapp&timestamp=$currentTimeStamp"
+    local UA_1="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36 Edg/96.0.1054.62"
+    local UA_2="Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.10(0x18000a2a) NetType/WIFI Language/zh_CN"
+
+    local api_1=$(
+        curl -s --connect-timeout 20 --retry 3 --noproxy "*" "$url_1" \
+            -H "Host: me-api.jd.com" \
+            -H "Accept: */*" \
+            -H "Connection: keep-alive" \
+            -H "Cookie: $cookie" \
+            -H "User-Agent: $UA_1" \
+            -H "Accept-Language: zh-cn" \
+            -H "Referer: https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&" \
+            -H "Accept-Encoding:  deflate, br"
+    )
+
+    local api_2=$(
+        curl -s --connect-timeout 20 --retry 3 --noproxy "*" "$url_2" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -H "Host: wxapp.m.jd.com" \
+            -H "Connection: keep-alive" \
+            -H "Cookie: $cookie" \
+            -H "User-Agent: $UA_2" \
+            -H "Referer: https://servicewechat.com/wxa5bf5ee667d91626/161/page-frame.html" \
+            -H "Accept-Encoding:  compress,deflate, br"
+    )
+   
+    retcode=$(echo $api_1 | jq -r .retcode)
+    if [[ $retcode == 0 ]]; then
+        nickname=$(echo $api_1 | jq -r .data | jq -r .userInfo | jq -r .baseInfo | jq -r .nickname)
+        echo -e "$nickname"
+    else
+        code=$(echo $api_2 | jq -r .code)
+        if [[ $code != 999 ]]; then
+            nickname=$(echo $api_2 | jq -r .user | jq -r .petName)
+            echo -e "$nickname"
+        fi
+    fi
+}
+
 ## 打印账号信息
 export_uesr_info(){
 for i in $@; do
@@ -152,16 +197,6 @@ verify_ck(){
     for ((x = 1; x <=22; x++)); do eval tmp$x=""; done
     for ((y = 1; y <=2; y++)); do eval tmp_Uid_$y=""; done
     for i in ${!value[@]}; do
-        remarks[i]="$(def_json JD_COOKIE remarks "pin=${pin[i]};" | head -1)"
-        if [[ ${remarks[i]} == *@@* ]]; then
-            remarks_name[i]="($(echo ${remarks[i]} | awk -F '@@' '{print $1}'))"
-        elif [[ ${remarks[i]} && ${remarks[i]} != null ]]; then
-            remarks_name[i]="(${remarks[i]})"
-        else
-            remarks_name[i]="(未备注)"
-        fi
-        ori_full_name[i]="【${ori_sn[i]}】${pt_pin[i]}${remarks_name[i]}"
-        [[ "$NOTIFY_SHOWNAMETYPE" ]] && full_name[i]="【${ori_sn[i]}】${pt_pin[i]}" || full_name[i]="${ori_full_name[i]}"
         status[i]="$(def_json JD_COOKIE status "pin=${pin[i]};" | head -1)"
         [[ ${status[i]} = 0 ]] && current_status[i]="已启用" || current_status[i]="已禁用"
 
@@ -171,10 +206,9 @@ verify_ck(){
         wskey_remarks[i]="$(def_json JD_WSCK remarks "pin=${pin[i]};" | head -1)"
 
         # WxPusherUid 相关值
-        #[[ -d $dir_scripts/ccwav_QLScript2 ]] && CK_WxPusherUid_dir="$dir_scripts/ccwav_QLScript2" || CK_WxPusherUid_dir="$dir_scripts"
+        tmp_Uid_1="$(echo ${remarks[i]} | grep -Eo 'UID_\w{28}')"
         CK_WxPusherUid_dir="$dir_scripts"
         [[ $CK_WxPusherUid = 2 ]] && CK_WxPusherUid_file="CK_WxPusherUid_Sample.json" || CK_WxPusherUid_file="CK_WxPusherUid.json"
-        tmp_Uid_1="$(echo ${remarks[i]} | grep -Eo 'UID_\w{28}')"
         [[ -f $CK_WxPusherUid_dir/$CK_WxPusherUid_file ]] && tmp_Uid_2="$(def_json_value "$CK_WxPusherUid_dir/$CK_WxPusherUid_file" Uid "pin=${pin[i]};")"
         if [[ $tmp_Uid_1 ]]; then
             Uid[i]="$tmp_Uid_1"
@@ -184,10 +218,49 @@ verify_ck(){
             Uid[i]=""
         fi
 
+        # 备注名处理
+        remarks[i]="$(def_json JD_COOKIE remarks "pin=${pin[i]};" | head -1)"
+        remarks_id[i]="$(echo ${remarks[i]} | awk -F '@@' '{print $1}')"
+        [[ ! ${remarks_id[i]} || ${remarks_id[i]} = null ]] && [[ ${wskey_remarks[i]} && ${wskey_remarks[i]} != null ]] && remarks_id[i]=${wskey_remarks[i]}
+        if [[ ${remarks[i]} == *@@* ]]; then
+            remarks_name[i]="($(echo ${remarks[i]} | awk -F '@@' '{print $1}'))"
+        elif [[ ${remarks[i]} && ${remarks[i]} != null ]]; then
+            remarks_name[i]="(${remarks[i]})"
+        else
+            remarks_name[i]="(未备注)"
+        fi
+        tmp_NickName_1=$(Get_NickName "${value[i]}")
+        [[ -f $CK_WxPusherUid_dir/$CK_WxPusherUid_file ]] && tmp_NickName_2="$(def_json_value "$CK_WxPusherUid_dir/$CK_WxPusherUid_file" NickName "pin=${pin[i]};")"
+        if [[ $tmp_NickName_1 ]]; then
+            NickName[i]="$tmp_NickName_1"
+        elif [[ $tmp_NickName_2 ]]; then
+            NickName[i]="$tmp_NickName_2"
+        else
+            NickName[i]=""
+        fi
+        [[ ! ${NickName[i]} || ${NickName[i]} = null ]] && UserName[i]=${pin[i]} || UserName[i]=${NickName[i]}
+        ori_full_name[i]="【${ori_sn[i]}】${UserName[i]}${remarks_name[i]}"
+        full_name[i]="${ori_full_name[i]}"
+        
+        if [[ $NICKNAME_REMARK_SYNC = 1 ]]; then
+            if [[ ${remarks[i]} == *${NickName[i]}* ]]; then
+                remarks_id[i]="${remarks_id[i]}"
+            else
+                remarks_ori_id[i]="$(echo ${remarks_id[i]} | awk -F '(' '{print $1}')"
+                if [[ ! ${NickName[i]} || ${NickName[i]} = null ]]; then
+                    remarks_id[i]="${remarks_ori_id[i]}(${pt_pin[i]})"
+                else
+                    remarks_id[i]="${remarks_ori_id[i]}(${NickName[i]})"
+                fi
+            fi
+        fi
+        remarks_new[i]="${remarks_id[i]}"
+        
+
         # JD_COOKIE 有效性检查
         local test_connect="$(curl -I -s --connect-timeout 20 --retry 3 --noproxy "*" https://bean.m.jd.com/bean/signIndex.action -w %{http_code} | tail -n1)"
+        echo ""
         if [ "$test_connect" -eq "302" ]; then
-            echo ""
             check_jd_ck ${value[i]}
             if [[ $? = 0 ]]; then
                 ck_status[i]="0"
@@ -255,35 +328,53 @@ verify_ck(){
         fi
 
         # 生成 CK_WxPusherUid.json 或 CK_WxPusherUid_Sample.json 模板
-        if [[ $CK_WxPusherUid = 1 || $CK_WxPusherUid = 2 ]]; then
-            remarks_id[i]="$(echo ${remarks[i]} | awk -F '@@' '{print $1}')"
-            if [[ ${remarks[i]} == *@@* ]]; then
-                timestamp_s[i]="$(echo ${remarks[i]} | grep -Eo '@@([0-9]{13})' | grep -Eo '[0-9]{13}' | head -1)"
-                if [[ ! ${timestamp_s[i]} ]]; then
-                    timestamp_s[i]=$(echo $[$(date +%s%N)/1000000])
-                    [[ ${Uid[i]} ]] && remarks_new[i]="${remarks_id[i]}@@${timestamp_s[i]}@@${Uid[i]}" || remarks_new[i]="${remarks_id[i]}@@${timestamp_s[i]}"
-                    ql_update_env_api JD_COOKIE "${value[i]}" ${_id[i]} "${remarks_new[i]}"
-                fi
-                if [[ ! $(echo ${remarks[i]} | grep -Eo 'UID_\w{28}') ]]; then
+        if [[ ${remarks[i]} == *@@* ]]; then
+            timestamp_s[i]="$(echo ${remarks[i]} | grep -Eo '@@([0-9]{13})' | grep -Eo '[0-9]{13}' | head -1)"
+            if [[ ${timestamp_s[i]} ]]; then
+                if [[ ${Uid[i]} ]]; then
+                    remarks_new[i]="${remarks_id[i]}@@${timestamp_s[i]}@@${Uid[i]}"
+                else
                     tmp17="${full_name[i]}\n"
                     tmp18="$tmp18$tmp17"
                 fi
-            elif [[ -f $CK_WxPusherUid_dir/$CK_WxPusherUid_file ]]; then
+            else
+                timestamp_s[i]=$(echo $[$(date +%s%N)/1000000])
                 if [[ ${Uid[i]} ]]; then
-                    timestamp_s[i]=$(echo $[$(date +%s%N)/1000000])
                     remarks_new[i]="${remarks_id[i]}@@${timestamp_s[i]}@@${Uid[i]}"
                     ql_update_env_api JD_COOKIE "${value[i]}" ${_id[i]} "${remarks_new[i]}"
                 fi
             fi
-            if [[ ! ${Uid[i]} ]]; then
-                tmp19="${full_name[i]}\n"
-                tmp20="$tmp20$tmp19"
-            fi
+        fi
+        if [[ ! ${Uid[i]} ]]; then
+            tmp19="${full_name[i]}\n"
+            tmp20="$tmp20$tmp19"
+        fi
+        if [[ $CK_WxPusherUid = 1 || $CK_WxPusherUid = 2 ]]; then
             [[ $tmp18 ]] && temp_No_UID_1="只扫码未对接WxPusher的账号：\n$tmp18\n"
             [[ $tmp20 ]] && temp_No_UID_2="未录入WxPusherUID的账号：\n$tmp20\n"
-            tmp21=" {\n\t\"序号\": \"${ori_sn[i]}\",\n\t\"JD_COOKIE\": \"${value[i]}\",\n\t\"pin\": \"${pin[i]}\",\n\t\"备注\": \"${remarks_id[i]}\",\n\t\"pt_pin\": \"${pt_pin[i]}\",\n\t\"Uid\": \"${Uid[i]}\"\n }"
+            tmp21=" {\n\t\"序号\": \"${ori_sn[i]}\",\n\t\"NickName\": \"${NickName[i]}\",\n\t\"JD_COOKIE\": \"${value[i]}\",\n\t\"pin\": \"${pin[i]}\",\n\t\"备注\": \"${remarks_id[i]}\",\n\t\"pt_pin\": \"${pt_pin[i]}\",\n\t\"Uid\": \"${Uid[i]}\"\n }"
             tmp22="$tmp22,\n$tmp21"
-            [[ $CK_WxPusherUid = 1 || $CK_WxPusherUid = 2 ]] && temp_CK_WxPusherUid="[\n$(echo $tmp22 | sed 's/^,\\n//')\n]"
+            [[ $tmp22 ]] && temp_CK_WxPusherUid="[\n$(echo $tmp22 | sed 's/^,\\n//')\n]"
+        fi
+
+        # 同步 JD_COOKIE 和 JD_WSCK 的同 pin 备注名
+        if [[ $NICKNAME_REMARK_SYNC = 1 ]]; then
+            if [[ ${remarks[i]} == *${NickName[i]}* ]]; then
+                remarks_id[i]="${remarks_id[i]}"
+            else
+                ql_update_env_api JD_COOKIE "${value[i]}" ${_id[i]} "${remarks_new[i]}"
+            fi
+        fi
+        if [[ $WSKEY_REMARK_SYNC = 1 ]]; then
+            if [[ ${wskey_value[i]} && ${wskey_value[i]} != null ]]; then
+                if [[ ${remarks_id[i]} != ${wskey_remarks[i]} ]]; then
+                    if [[ ${remarks_id[i]} && ${remarks_id[i]} != null ]]; then
+                        ql_update_env_api JD_WSCK "${wskey_value[i]}" ${wskey_id[i]} "${remarks_id[i]}"
+                    elif [[ ! ${remarks_id[i]} || ${remarks_id[i]} = null ]]; then
+                        ql_update_env_api JD_COOKIE "${value[i]}" ${_id[i]} "${remarks_new[i]}"
+                    fi
+                fi
+            fi
         fi
     done
     echo ""
@@ -321,7 +412,7 @@ sort_notify_content(){
             for i in $invalid_sub; do
                 if [ ${Uid[i]} ]; then
                     [[ $MainWP_UID ]] && uids="$(echo $MainWP_UID,${Uid[i]} | perl -pe '{s|^|\"|; s|,|\",\"|g; s|$|\"|}')" || uids="$(echo ${Uid[i]} | perl -pe '{s|^|\"|; s|$|\"|}')"
-                    [[ ${none_wskey_pin[i]} ]] && content_1="${ori_full_name[i]} 账号失效<br>${ori_full_name[i]} 未录入 JD_WSCK(wskey)" || content_1="${ori_full_name[i]} 账号失效"
+                    [[ ${none_wskey_pin[i]} ]] && content_1="${full_name[i]} 账号失效<br>${full_name[i]} 未录入 JD_WSCK(wskey)<br><br>$ExNotify_Content" || content_1="${full_name[i]} 账号失效<br><br>$ExNotify_Content"
                     if [[ $NOTIFY_SKIP_SAME_CONTENT = 1 ]]; then
                         [[ ! $temp_expired_ck_last =~ ${pin[i]} ]] && WxPusher_notify_api $WP_APP_TOKEN_ONE "$content_1" "Cookie 失效通知" "$uids"
                     else
@@ -333,11 +424,11 @@ sort_notify_content(){
     }
 
     invalid_sub="$(def_sub JD_COOKIE status 1)"
-    temp_expired_ck="$(invalid_pin)"
+    temp_expired_ck="$(echo $(invalid_pin))"
     [[ $dir_scripts/CK_Cache ]] && . $dir_scripts/CK_Cache
-    if [[ $temp_expired_ck ]]; then
+    if [[ $temp_expired_ck && $temp_expired_ck_last ]]; then
         if [[ $NOTIFY_SKIP_SAME_CONTENT = 1 ]] && [[ $temp_expired_ck = $temp_expired_ck_last ]]; then
-            echo "# 失效账号与上次检测结果一致，本次不推送。"
+            echo -e "# 失效账号与上次检测结果一致，本次不推送。\n"
             temp_valid_ck=""
         else
             temp_valid_ck="$(temp_content1)"
@@ -370,23 +461,23 @@ echo -n "# 开始检查账号有效性"
 [[ $NOTIFY_VALID_TIME = 1 || $NOTIFY_VALID_TIME = 2 ]] && echo -e "，预测账号有效期谨供参考 ..." || echo -e " ..."
 verify_ck
 if [[ $WSKEY_TO_CK = 1 ]]; then
-    echo -e "# 正在搜索 wskey 转换脚本 ..."
-    wskey_scr=($(find $dir_scripts -type f -name *wskey*.py))
-    if [[ ${wskey_scr[0]} ]]; then
-        if [[ $tmp10 ]]; then
-            echo -e "# 检测到失效账号，开始执行 wskey 转换 ..."
+    if [[ $tmp10 ]]; then
+        echo -e "# 检测到失效账号，开始搜索 wskey 转换脚本 ..."
+        wskey_scr=($(find $dir_scripts -type f -name *wskey*.py))
+        if [[ ${wskey_scr[0]} ]]; then
+            echo -e "# 已搜索到 wskey 转换脚本，开始执行 wskey 转换 ..."
             define_program $wskey_scr
             $which_program ${wskey_scr[0]}
             echo -e ""
+        else
+            echo -e "# 未搜索到 wskey 转换脚本，跳过 wskey 转换 ..."
         fi
-    else
-        echo -e "# 未搜索到 wskey 转换脚本，跳过 wskey 转换 ..."
     fi
 fi
 
 sort_notify_content
 notify_one_to_one
-notify_content="$temp_valid_ck$temp_no_wsck$temp_No_UID_1$temp_No_UID_2$temp_valid_time"
+notify_content="$temp_valid_ck$temp_no_wsck$temp_No_UID_1$temp_No_UID_2$temp_valid_time\n\n$ExNotify_Content"
 
 if [[ $notify_content ]]; then
     echo -e "$notify_content"
