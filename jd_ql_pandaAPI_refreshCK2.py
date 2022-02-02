@@ -1,5 +1,5 @@
 """
-new Env('青龙全自动更新cookie');
+new Env('wskey本地更新cookie');
 """
 
 import requests
