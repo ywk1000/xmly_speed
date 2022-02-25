@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## Build 20220118-001-test
+## Build 20220201-001-test
 
 ## 添加你需要重启自动执行的任意命令，比如 ql repo
 ## 安装node依赖使用 pnpm install -g xxx xxx
@@ -143,16 +143,25 @@ batch_deps_scripts(){
         local url="$1"
         local file_path="$2"
         file="${url##*/}"
-    
-        curl -C - -s --connect-timeout 30 --retry 3 --noproxy "*" "$url" -o $file_path/tmp_$file
-        if [[ -f "$file_path/tmp_$file" ]]; then
-            if [[ $(get_remote_filesize $url) -eq $(get_local_filesize $file_path/tmp_$file ) ]]; then
-                if [[ -f "$file_path/$file" ]]; then
-                    [[ "$(get_md5 $file_path/$file)" != "$(get_md5 $file_path/tmp_$file)" ]] && mv -f $file_path/tmp_$file $file_path/$file || rm -rf $file_path/tmp_$file
-                else
-                    mv -f $file_path/tmp_$file $2/$file
+
+        local api=$(
+            curl -sI --connect-timeout 30 --retry 3 --noproxy "*" -o /dev/null -s -w %{http_code} "$url"
+        )
+
+        code=$(echo $api)
+        if [[ $code == 200 || $code == 301 ]]; then
+            curl -C - -s --connect-timeout 30 --retry 3 --noproxy "*" "$url" -o $file_path/tmp_$file
+            if [[ -f "$file_path/tmp_$file" ]]; then
+                if [[ $(get_remote_filesize $url) -eq $(get_local_filesize $file_path/tmp_$file ) ]]; then
+                    if [[ -f "$file_path/$file" ]]; then
+                        [[ "$(get_md5 $file_path/$file)" != "$(get_md5 $file_path/tmp_$file)" ]] && mv -f $file_path/tmp_$file $file_path/$file || rm -rf $file_path/tmp_$file
+                    else
+                        mv -f $file_path/tmp_$file $2/$file
+                    fi
                 fi
             fi
+        else
+            echo "无法链接下载链接，请稍后再试！"
         fi
     }
     
@@ -161,5 +170,5 @@ batch_deps_scripts(){
     done
 }
 
-[[ $DOWNLOAD_BASIC_JS = "1" ]] && batch_deps_scripts >/dev/null 2>&1 &
+[[ $DOWNLOAD_BASIC_JS = "1" ]] && batch_deps_scripts
 [[ $FixDependType = "1" ]] && install_node_dependencies_all >/dev/null 2>&1 &

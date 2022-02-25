@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## Build 20220115-001-test
+## Build 20220222-001-test
 
 name_js=(
   jd_fruit
@@ -151,16 +151,13 @@ def_undecode(){
 
 def_ck_sub(){
     if [[ $@ ]]; then
-        local tmp_1 tmp_2 tmp_3 i j k
+        local i j k
         for ((j = 1; j <= 3; j++)); do eval tmp_$j=""; done  
         for i in $@; do
-            tmp_1="$i"
-            tmp_2="$tmp_2|$tmp_1"
-        done
-        tmp_3="$(echo $tmp_2|sed 's/^|//g')"
-        for j in $(def_undecode $(def_json JD_COOKIE value) | awk '/'$tmp_3'/{print NR}'); do
-            k=$((j - 1));
-            echo $k
+            for j in $(def_undecode $(def_json JD_COOKIE value) | awk '/'$i'/{print NR}'); do
+                k=$((j - 1));
+                echo $k
+            done
         done
     fi
 }
