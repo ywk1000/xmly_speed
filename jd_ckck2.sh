@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## Build 20220212-001-test
+## Build 20220222-001-test
 
 ## 导入通用变量与函数
 dir_shell=/ql/shell
@@ -264,6 +264,9 @@ pushplus_notify_api() {
     if [[ $code == 200 ]]; then
         echo -e "#$frontcontent pushplus 消息发送成功\n"
     else
+        if [[ $code == 500 ]]; then
+            msg="服务器宕机"
+        fi
         [[ ! $msg ]] && msg="访问 API 超时"
         echo -e "#$frontcontent pushplus 消息发送处理失败(${msg})\n"
     fi
@@ -284,10 +287,13 @@ hxtrip_pushplus_notify_api() {
             --data-raw "{\"token\":\"$token\",\"title\":\"$title\",\"content\":\"$content\"}"
     )
     code=$(echo $api | perl -pe '{s|.*<code>([\d]+)</code>.*|\1|g}')
-    msg=$(echo $api | perl -pe '{s|.*<msg>([\d]+)</msg>.*|\1|g}')
+    msg=$(echo $api | perl -pe '{s|.*<msg>([\S]+)</msg>.*|\1|g}')
     if [[ $code == 200 ]]; then
         echo -e "#$frontcontent hxtrip pushplus 消息发送成功\n"
     else
+        if [[ $code == 500 ]]; then
+            msg="服务器宕机"
+        fi
         [[ ! $msg ]] && msg="访问 API 超时"
         echo -e "#$frontcontent hxtrip pushplus 消息发送处理失败(${msg})\n"
     fi
@@ -476,7 +482,15 @@ verify_ck(){
             ck_status_chinese="因 API 连接失败跳过检测"
         fi
         echo -n "${full_name[$j]} $ck_status_chinese"
-        [[ ${ck_status[$j]} ]] && [[ ${ck_status[$j]} != ${status_ori[$j]} ]] && ql_process_env_api $(eval echo \${$tmp_id[i]}) ${ck_status[$j]} $ck_process_chinese || echo -e ""
+        if [[ ${ck_status[$j]} != ${status_ori[$j]} ]]; then
+            if [[ ! $WSKEY_AUTO_DISABLE && ${ck_status[$j]} = 1 ]] || [[ ${ck_status[$j]} = 0 ]]; then
+               ql_process_env_api $(eval echo \${$tmp_id[i]}) ${ck_status[$j]} $ck_process_chinese
+            else
+                echo -e ""
+            fi
+        else
+            echo -e ""
+        fi
     }
 
     # JD_WSCK(wskey) 录入情况检查
@@ -582,8 +596,9 @@ verify_ck(){
         fi
     }
 
-    for i in $@; do
+    for i in ${!value[@]}; do
         local j=${pin[i]}
+        Checksum_code[i]=${pin[i]}
         echo ""
         Get_Full_Name $i
         check_ck $i
@@ -680,7 +695,7 @@ wsck_to_ck(){
         fi
         [[ ! $WSKEY_SCR_URL ]] && host_url="$(define_url ${host_url_array[@]})" && WSKEY_SCR_URL="$host_url/Zy143L/wskey/main/wskey.py"
         if [[ -f $wskey_scr ]]; then
-            if [[ -f $dir_scripts/wskey.py && $CHECK_UPDATE_WSKEY_SCR = 1 ]]; then
+            if [[ "$wskey_scr" = "$dir_scripts/wskey.py" && $CHECK_UPDATE_WSKEY_SCR = 1 ]]; then
                 echo -e "# 已检索到 wskey.py ，开始检查更新 wskey 转换脚本 ..."
                 download_file "$WSKEY_SCR_URL" $dir_scripts >/dev/null 2>&1
             else
@@ -744,12 +759,12 @@ content_notify(){
             if [[ "$uid" ]]; then
                 content_0="Cookie $process通知<br><br>"
                 content_1="$full_name 账号$status并$process"
-                [[ $wskey_end = 0 ]] && [[ ${wskey_invalid[i]} ]] && content_2="，JD_WSCK(wskey) 已失效"
+                [[ $wskey_end = 0 ]] && [[ ${wskey_invalid[i]} ]] && content_2="，JD_WSCK(wskey) 失效或转换失败"
                 [[ ${ck_none_wskey[i]} ]] && content_3="，未录入 JD_WSCK(wskey)"
                 [[ ${ck_undocked_uid[i]} ]] && content_4="，WxPusher 未对接完成"
                 [[ ${ck_no_uid[i]} ]] && content_5="，未录入 WxPusher UID"
                 summary="$content_0$content_1$content_2$content_3$content_4$content_5"
-                content="$content_0$content_top<br><br>$content_1$content_2$content_3$content_4$content_5<br><br><br><br>$content_bot"
+                content="$content_0$content_top$content_1$content_2$content_3$content_4$content_5$content_bot"
                 [[ ${#summary} -gt 100 ]] && summary="${summary: 0: 96} ……"
                 WxPusher_notify_api $WP_APP_TOKEN_ONE "$content" "$summary" "$uid" "$full_name"
             fi
@@ -816,8 +831,9 @@ content_notify(){
                 status_last[$j]=${status_ori[$j]}
             fi
             final_status[$j]="$(def_json JD_COOKIE status "pin=$j;")"
-            [[ ! ${ck_status[$j]} ]] && continue
-            [[ "${final_status[$j]}" == "${status_last[$j]}" ]] && [[ "${final_status[$j]}" == "${ck_status[$j]}" ]] && [[ ${final_status[$j]} = 0 ]] && continue
+            if [[ ${Checksum_code[i]} = ${pin[i]} ]]; then
+                [[ ${ck_status[$j]} != 2 ]] && [[ "${final_status[$j]}" == "${status_last[$j]}" ]] && [[ "${final_status[$j]}" == "${ck_status[$j]}" ]] && [[ ${final_status[$j]} = 0 ]] && continue
+            fi
             Get_Full_Name $i
             export_valid_result $i
             check_wskey $i
@@ -847,7 +863,7 @@ content_notify(){
         [[ $NOTIFY_VALID_TIME = 1 ]] && content_5=$notify_content_validity_lt_1day_all
 
         wskey_invalid_all="$(print_array "${wskey_invalid[*]}")"
-        [[ $wskey_invalid_all ]] && notify_content_wskey_invalid_all="💫💫✨JD_WSCK(wskey)失效的账号(共${#wskey_invalid[@]}个)✨💫💫\n$wskey_invalid_all\n"
+        [[ $wskey_invalid_all ]] && notify_content_wskey_invalid_all="💫💫✨JD_WSCK(wskey)失效或转换失败的账号(共${#wskey_invalid[@]}个)✨💫💫\n$wskey_invalid_all\n"
         [[ $NOTIFY_WSKEY_NO_EXIST = 1 ]] && content_6=$notify_content_wskey_invalid_all
 
         ck_none_wskey_all="$(print_array "${ck_none_wskey[*]}")"
@@ -901,9 +917,9 @@ content_notify(){
         if [[ $(echo $WP_APP_TOKEN_ONE|grep -Eo 'AT_(\w{32})') && $(echo $MainWP_UID|grep -Eo 'UID_\w{28}') ]] || [[ $QYWX_KEY ]] || [[ $QYWX_AM ]] || [[ $PUSH_PLUS_TOKEN ]] || [[ $PUSH_PLUS_TOKEN_hxtrip ]] || [[ $TG_BOT_TOKEN && $TG_USER_ID ]]; then
             if [[ $(echo $WP_APP_TOKEN_ONE|grep -Eo 'AT_(\w{32})') && $(echo $MainWP_UID|grep -Eo 'UID_\w{28}') ]]; then
                 #local summary="Cookie 状态通知<br><br>$(echo $display_content | perl -pe '{s|\\n|<br>|g}')"
-                #local content="Cookie 状态通知<br><br>$content_top<br><br>$(echo $display_content | perl -pe '{s|\\n|<br>|g}')<br><br><br><br>$content_bot"
+                #local content="Cookie 状态通知<br><br>$content_top$(echo $display_content | perl -pe '{s|\\n|<br>|g}')$content_bot"
                 local summary="Cookie 状态通知<br><br>$(echo $content_top | perl -pe '{s|\\n|<br>|g}')"
-                local content="Cookie 状态通知<br><br>$content_top<br><br>$(echo $notify_content | perl -pe '{s|\\n|<br>|g}')<br><br><br><br>$content_bot"
+                local content="Cookie 状态通知<br><br>$content_top$(echo $notify_content | perl -pe '{s|\\n|<br>|g}')$content_bot"
                 uids="$(echo $MainWP_UID | perl -pe '{s|^|\"|; s|$|\"|}')"
                 WxPusher_notify_api $WP_APP_TOKEN_ONE "$content" "$summary" "$uids"
             fi
@@ -916,20 +932,20 @@ content_notify(){
                 QYWX_GetToken_api
                 if [[ $? = 0 ]]; then
                     #local summary="$display_content"
-                    #local content="$content_top<br><br>$(echo $display_content | perl -pe '{s|\\n|<br>|g}')<br><br><br><br>$content_bot"
+                    #local content="$content_top$(echo $display_content | perl -pe '{s|\\n|<br>|g}')$content_bot"
                     local summary="$notify_content"
-                    local content="$content_top<br><br>$(echo $notify_content | perl -pe '{s|\\n|<br>|g}')<br><br><br><br>$content_bot"
+                    local content="$content_top$(echo $notify_content | perl -pe '{s|\\n|<br>|g}')$content_bot"
                     QYWX_notify_api "Cookie 状态通知" "$content" "$summary"
                 fi
             fi
             if [[ $PUSH_PLUS_TOKEN ]]; then
-                #local content="$content_top<br><br>$(echo $display_content | perl -pe '{s|\\n|<br>|g}')<br><br><br><br>$content_bot"
-                local content="$content_top<br><br>$(echo $notify_content | perl -pe '{s|\\n|<br>|g}')<br><br><br><br>$content_bot"
+                #local content="$content_top$(echo $display_content | perl -pe '{s|\\n|<br>|g}')$content_bot"
+                local content="$content_top$(echo $notify_content | perl -pe '{s|\\n|<br>|g}')$content_bot"
                 pushplus_notify_api $PUSH_PLUS_TOKEN "Cookie 状态通知" "$content"
             fi
             if [[ $PUSH_PLUS_TOKEN_hxtrip ]]; then
-                #local content="$content_top<br><br>$(echo $display_content | perl -pe '{s|\\n|<br>|g}')<br><br><br><br>$content_bot"
-                local content="$content_top<br><br>$(echo $notify_content | perl -pe '{s|\\n|<br>|g}')<br><br><br><br>$content_bot"
+                #local content="$content_top$(echo $display_content | perl -pe '{s|\\n|<br>|g}')$content_bot"
+                local content="$content_top$(echo $notify_content | perl -pe '{s|\\n|<br>|g}')$content_bot"
                 hxtrip_pushplus_notify_api $PUSH_PLUS_TOKEN_hxtrip "Cookie 状态通知" "$content"
             fi
             if [[ $TG_BOT_TOKEN && $TG_USER_ID ]]; then
@@ -949,7 +965,7 @@ echo -n "# 开始检查账号有效性"
 [[ $NOTIFY_VALID_TIME = 1 || $NOTIFY_VALID_TIME = 2 ]] && echo -e "，预测账号有效期谨供参考 ..." || echo -e " ..."
 declare -A remarks_ori remarks_id remarks_name remarks_new wskey_value wskey_id wskey_remarks tmp_Uid_1 tmp_Uid_2 Uid NickName full_name status_ori ck_status status_last final_status up_timestamp
 gen_pt_pin_array
-verify_ck ${!value[@]}
+verify_ck
 echo ""
 wsck_to_ck
 content_notify
