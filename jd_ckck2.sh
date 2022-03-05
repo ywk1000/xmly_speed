@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## Build 20220302-001-Alpha
+## Build 20220304-001-Alpha
 
 ## 导入通用变量与函数
 dir_shell=/ql/shell
@@ -399,6 +399,18 @@ spc_sym_tr(){
     echo $1 | perl -pe '{s|(\")|'\\'\\1|g}'
 }
 
+# 字符串 urlencode 加密
+urlencode() {
+    local LANG=C
+    for ((i=0;i<${#1};i++)); do
+        if [[ ${1:$i:1} =~ ^[a-zA-Z0-9\.\~\_\-]$ ]]; then
+            printf "${1:$i:1}"
+        else
+            printf '%%%02X' "'${1:$i:1}"
+        fi
+    done
+}
+
 ## 获取用户昵称 API
 Get_NickName() {
     local currentTimeStamp=$(date +%s)
@@ -551,7 +563,6 @@ verify_ck(){
         fi
         echo -n "${full_name[$j]} $ck_status_chinese"
         if [[ ${ck_status[$j]} = 1 ]] && [[ ${wskey_value[$j]} ]]; then
-            jd_cookie=""
             wsck_to_ck ${wskey_value[$j]}
             if [[ $jd_cookie ]]; then
                 unset ck_invalid[i]
@@ -737,7 +748,6 @@ verify_ck(){
     if [[ ${#wskey_array[@]} -gt 0 ]]; then
         echo -e "\n# 检测到还未转换 JD_COOKIE 的 JD_WSCK(wskey)，开始进行 wskey 转换 ..."
         for other_wskey in ${wskey_array[@]}; do
-            jd_cookie=""
             let i++
             sn[i]=$((i + 1))
             pin[i]=$(echo $other_wskey | perl -pe "{s|.*pin=([^; ]+)(?=;?).*|\1|}")
@@ -772,6 +782,79 @@ verify_ck(){
 ## 检测到失效账号，自动使用JD_WSCK(wskey) 转换 JD_COOKIE
 wsck_to_ck(){
     local wskey=$1
+    local host params
+    jd_cookie=""
+    wskey_sign_api=("http://43.135.90.23/" "https://shizuku.ml/" "https://cf.shizuku.ml/")
+    get_jdCookie(){
+        for host in ${wskey_sign_api[@]}; do
+            local url="${host}check_api"
+            local api=$(
+                curl -s -k --connect-timeout 20 --retry 3 --noproxy "*" "$url" \
+                    -H "Authorization: Bearer Shizuku"
+            )
+
+            local code=$(echo $api | jq -r .code)
+            if [[ $code == 200 ]]; then
+                local UA=$(echo $api | jq -r '.["User-Agent"]')
+                local url="${host}genToken"
+                local api=$(
+                    curl -s -k --connect-timeout 20 --retry 3 --noproxy "*" "$url" \
+                        -H "User-Agent: $UA"
+                )
+
+                #for params in functionId clientVersion build client partner oaid sdkVersion lang harmonyOs networkType uemps ext ef ep st sign sv; do
+                for params in functionId clientVersion client ef ep st sign sv; do
+                
+                    if [[ $params = ext || $params = ep ]]; then
+                        eval $params='$(urlencode $(echo $api | jq -r .$params))'
+                    else
+                        eval $params='$(echo $api | jq -r .$params)'
+                    fi
+                done
+
+                #local url="https://api.m.jd.com/client.action?functionId=${functionId}&body=%7B%22to%22%3A%22https%253a%252f%252fplogin.m.jd.com%252fjd-mlogin%252fstatic%252fhtml%252fappjmp_blank.html%22%7D&clientVersion=${clientVersion}&build=${build}&client=${client}&partner=${partner}&oaid=${oaid}&sdkVersion=${sdkVersion}&lang=${lang}&harmonyOs=${harmonyOs}&networkType=${networkType}&uemps=${uemps}&ext=${ext}&ef=${ef}&ep=${ep}&st=${st}&sign=${sign}&sv=${sv}"
+                local url="https://api.m.jd.com/client.action?functionId=${functionId}&body=%7B%22to%22%3A%22https%253a%252f%252fplogin.m.jd.com%252fjd-mlogin%252fstatic%252fhtml%252fappjmp_blank.html%22%7D&clientVersion=${clientVersion}&client=${client}&ef=${ef}&ep=${ep}&st=${st}&sign=${sign}&sv=${sv}"
+                local api=$(
+                    curl -s -k --connect-timeout 20 --retry 3 --noproxy "*" "$url" \
+                        -H "Cookie: $wskey" \
+                        -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" \
+                        -H "charset: UTF-8" \
+                        -H "Accept-Encoding: br,deflate" \
+                        -H "User-Agent: $UA"
+                )
+
+                local code=$(echo $api | jq -r .code)
+                if [[ $code == 0 ]]; then
+                    tokenKey=$(echo $api | jq -r .tokenKey)
+                    
+                    # 获取 pt_pin 和 pt_key
+                    local url="https://un.m.jd.com/cgi-bin/app/appjmp?tokenKey=${tokenKey}&to=https://plogin.m.jd.com/jd-mlogin/static/html/appjmp_blank.html"
+                    local api=$(
+                        curl -I -s -k --connect-timeout 20 --retry 3 --noproxy "*" "${url}" \
+                            -H "Connection: Keep-Alive" \
+                            -H "Accept: */*" \
+                            -H "User-Agent: $UA" \
+                            -H "Accept-Language: zh-Hans-CN;q=1, en-CN;q=0.9" \
+                            -H "Content-Type: application/x-www-form-urlencoded" \
+                            -H "x-requested-with: com.jingdong.app.mall"
+                    )
+                    [[ "$api" == *pt_key=app_open* ]] && jd_cookie="$(echo "$api" | grep -Eo 'pt_key=(\S*?);')$(echo "$api" | grep -Eo 'pt_pin=(\S*?);')"
+                    break
+                else
+                    echo -n "(JD_WSCK(wskey) 转换 API 访问失败)"
+                fi
+            else
+                echo -n "(签名(Sign) 参数获取接口错误)"
+            fi
+        done
+    }
+
+    get_jdCookie
+}
+
+wsck_to_ck_1(){
+    local wskey=$1
+    jd_cookie=""
     wskey_sign_api=("http://43.135.90.23/" "https://shizuku.ml/" "https://cf.shizuku.ml/")
 
     # 获取 User-Agent
