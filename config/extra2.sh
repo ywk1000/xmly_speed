@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## Build 20220201-001-test
+## Build 20220302-002-test
 
 ## 添加你需要重启自动执行的任意命令，比如 ql repo
 ## 安装node依赖使用 pnpm install -g xxx xxx
@@ -170,5 +170,59 @@ batch_deps_scripts(){
     done
 }
 
+## 选择python3还是node
+define_program() {
+    local first_param=$1
+    if [[ $first_param == *.js ]]; then
+        which_program="node"
+    elif [[ $first_param == *.py ]]; then
+        which_program="python3"
+    elif [[ $first_param == *.sh ]]; then
+        which_program="bash"
+    elif [[ $first_param == *.ts ]]; then
+        which_program="ts-node-transpile-only"
+    else
+        which_program=""
+    fi
+}
+
+#解析口令
+jcommand(){
+    for i in ${JD_CODE}; do 
+        local code=$i
+        local url="https://api.jds.codes/jd/jcommand"
+        local api=$(
+            curl -s -k --connect-timeout 20 --retry 3 --noproxy "*" "${url}" \
+                -H "Content-Type: application/json" \
+                -d '{"code": "'${code}'"}'
+        )
+
+        local code=$(echo $api | jq -r .code)
+        if [[ $code == 200 ]]; then
+            local title=$(echo $api | jq -r .data.title)
+            local userName=$(echo $api | jq -r .data.userName)
+            local jumpUrl=$(echo $api | jq -r .data.jumpUrl)
+            local activityUrl=$(echo $jumpUrl | perl -pe '{s|.*(http[\S]+.com)(?=/?).*|\1|g}')
+            local activityId=$(echo $jumpUrl | perl -pe '{s|.*activityId=([^&]+)(?=&?).*|\1|g}')
+            echo -e "活动口令解析结果如下  ："
+            echo -e "活动标题     (title) : $title"
+            echo -e "口令发起人(userName) : $userName"
+            echo -e "活动 ID (activityId) : $activityId"
+            echo -e "活动链接(activityUrl): $activityUrl"
+            local zdjr_scr="$(find $dir_scripts -type f -name "$ZDJR_SCR" | head -1)"
+            if [[ $zdjr_scr ]]; then
+                echo -e "开始运行 $zdjr_scr ..."
+                export activityId=$activityId
+                export activityUrl=$activityUrl
+                export jd_zdjr_activityId=$activityId
+                export jd_zdjr_activityUrl=$activityUrl
+                define_program $zdjr_scr
+                $which_program $zdjr_scr
+            fi
+        fi
+    done
+}
+
+[[ $JD_CODE ]] && jcommand
 [[ $DOWNLOAD_BASIC_JS = "1" ]] && batch_deps_scripts
 [[ $FixDependType = "1" ]] && install_node_dependencies_all >/dev/null 2>&1 &
