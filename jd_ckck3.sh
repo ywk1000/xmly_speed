@@ -3,8 +3,6 @@
 ## 版本号
 Ver="Build 20220405-001-Alpha"
 
-let pandatoken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTQ0MzY4NDE5MCwiaWF0IjoxNjUzNDc2NDg4LCJleHAiOjE2ODUwMTI0ODh9.HIlV2U44HhA9E_l9b3lyDcRVIh4ltFRa6IxuZJl2PDM"
-
 ## 导入通用变量与函数
 [[ -d "/ql/shell" ]] && dir_shell=/ql/shell
 [[ -f "$dir_shell/share.sh" ]] && . $dir_shell/share.sh
