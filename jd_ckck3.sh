@@ -1226,7 +1226,7 @@ Get_UA(){
 # 获取 Sign 参数(jds 接口)
 Get_Sign_jds(){
     # 获取 Sign 参数
-    local url="https://api.jds.codes/jd/gentoken"
+    local url="https://api.zhezhe.cf/jd/gentoken"
     local api=$(
         curl -s -k --connect-timeout 20 --retry 3 --noproxy "*" "${url}" \
             -H "Content-Type: application/json" \
