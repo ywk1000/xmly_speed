@@ -44,7 +44,7 @@ echo
 "当前npm版本(如果没有npm，请自行安装): "
 npm -v
 
-npm config set registry https://registry.npm.taobao.org
+npm config set registry https://registry.npmjs.org
 cd /ql
 pnpm add -g pnpm
 
@@ -61,10 +61,6 @@ cd /ql
 apk add --no-cache build-base g++ cairo-dev pango-dev giflib-dev && cd scripts && npm install canvas --build-from-source
 cd /ql
 apk add python3 zlib-dev gcc jpeg-dev python3-dev musl-dev freetype-dev
-
-pnpm config set registry https://registry.npmjs.org
-
-pnpm install -g
 
 echo
 TIME g "依赖安装完毕...建议重启 Docker "
