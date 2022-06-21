@@ -64,6 +64,8 @@ apk add python3 zlib-dev gcc jpeg-dev python3-dev musl-dev freetype-dev
 
 pnpm config set registry https://registry.npmjs.org
 
+pnpm install -g
+
 echo
 TIME g "依赖安装完毕...建议重启 Docker "
 
