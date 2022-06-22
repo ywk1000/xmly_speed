@@ -121,6 +121,24 @@ if ($.isNode() && process.env.BEANCHANGE_USERGP4) {
 	console.log(`检测到设定了分组推送4,将禁用分段通知`);
 }
 
+if ($.isNode() && process.env.BEANCHANGE_USERGP5) {
+	MessageUserGp5 = process.env.BEANCHANGE_USERGP5 ? process.env.BEANCHANGE_USERGP5.split('&') : [];
+	intPerSent = 0; //分组推送，禁用账户拆分
+	console.log(`检测到设定了分组推送5,将禁用分段通知`);
+}
+
+if ($.isNode() && process.env.BEANCHANGE_USERGP6) {
+	MessageUserGp6 = process.env.BEANCHANGE_USERGP6 ? process.env.BEANCHANGE_USERGP6.split('&') : [];
+	intPerSent = 0; //分组推送，禁用账户拆分
+	console.log(`检测到设定了分组推送6将禁用分段通知`);
+}
+
+if ($.isNode() && process.env.BEANCHANGE_USERGP7) {
+	MessageUserGp7 = process.env.BEANCHANGE_USERGP7 ? process.env.BEANCHANGE_USERGP7.split('&') : [];
+	intPerSent = 0; //分组推送，禁用账户拆分
+	console.log(`检测到设定了分组推送7,将禁用分段通知`);
+}
+
 //取消月结查询
 //if ($.isNode() && process.env.BEANCHANGE_ENABLEMONTH) {
 	//EnableMonth = process.env.BEANCHANGE_ENABLEMONTH;
@@ -147,7 +165,9 @@ if (EnableMonth == "true" && Today.getDate() == 1 && Today.getHours() > 17)
 let userIndex2 = -1;
 let userIndex3 = -1;
 let userIndex4 = -1;
-
+let userIndex5 = -1;
+let userIndex6 = -1;
+let userIndex7 = -1;
 
 let decExBean=0;
 
@@ -465,6 +485,50 @@ if(DisableIndex!=-1){
 		}
 		allMessage2Gp3 = `【⏰商品白嫖活动任务提醒⏰】\n` + WarnMessageGp3 + allMessage2Gp3;
 	}
+	
+	//组4通知
+	if (ReceiveMessageGp4) {
+		allMessage2Gp4 = `【⏰商品白嫖活动领取提醒⏰】\n` + ReceiveMessageGp4;
+	}
+	if (WarnMessageGp4) {
+		if (allMessage2Gp4) {
+			allMessage2Gp4 = `\n` + allMessage2Gp4;
+		}
+		allMessage2Gp3 = `【⏰商品白嫖活动任务提醒⏰】\n` + WarnMessageGp4 + allMessage2Gp4;
+	}
+	
+	//组5通知
+	if (ReceiveMessageGp5) {
+		allMessage2Gp5 = `【⏰商品白嫖活动领取提醒⏰】\n` + ReceiveMessageGp5;
+	}
+	if (WarnMessageGp5) {
+		if (allMessage2Gp5) {
+			allMessage2Gp5 = `\n` + allMessage2Gp5;
+		}
+		allMessage2Gp5 = `【⏰商品白嫖活动任务提醒⏰】\n` + WarnMessageGp5 + allMessage2Gp5;
+	}
+	
+	//组6通知
+	if (ReceiveMessageGp6) {
+		allMessage2Gp6 = `【⏰商品白嫖活动领取提醒⏰】\n` + ReceiveMessageGp6;
+	}
+	if (WarnMessageGp6) {
+		if (allMessage2Gp6) {
+			allMessage2Gp6 = `\n` + allMessage2Gp6;
+		}
+		allMessage2Gp6 = `【⏰商品白嫖活动任务提醒⏰】\n` + WarnMessageGp6 + allMessage2Gp6;
+	}
+	
+	//组7通知
+	if (ReceiveMessageGp7) {
+		allMessage2Gp7 = `【⏰商品白嫖活动领取提醒⏰】\n` + ReceiveMessageGp7;
+	}
+	if (WarnMessageGp7) {
+		if (allMessage2Gp7) {
+			allMessage2Gp7 = `\n` + allMessage2Gp7;
+		}
+		allMessage2Gp7 = `【⏰商品白嫖活动任务提醒⏰】\n` + WarnMessageGp7 + allMessage2Gp7;
+	}
 
 	//其他通知
 	if (allReceiveMessage) {
@@ -525,6 +589,33 @@ if(DisableIndex!=-1){
 			}, '\n\n本通知 By ccwav Mod',TempMessage)
 			await $.wait(10 * 1000);
 		}
+		if ($.isNode() && allMessageGp5) {
+			var TempMessage=allMessageGp5;
+			if(strAllNotify)
+				allMessageGp5=strAllNotify+`\n`+allMessageGp5;
+			await notify.sendNotify(`${$.name}#5`, `${allMessageGp5}`, {
+				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+			}, '\n\n本通知 By ccwav Mod',TempMessage)
+			await $.wait(10 * 1000);
+		}
+		if ($.isNode() && allMessageGp6) {
+			var TempMessage=allMessageGp6;
+			if(strAllNotify)
+				allMessageGp6=strAllNotify+`\n`+allMessageGp6;
+			await notify.sendNotify(`${$.name}#6`, `${allMessageGp6}`, {
+				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+			}, '\n\n本通知 By ccwav Mod',TempMessage)
+			await $.wait(10 * 1000);
+		}
+		if ($.isNode() && allMessageGp7) {
+			var TempMessage=allMessageGp7;
+			if(strAllNotify)
+				allMessageGp7=strAllNotify+`\n`+allMessageGp7;
+			await notify.sendNotify(`${$.name}#7`, `${allMessageGp7}`, {
+				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+			}, '\n\n本通知 By ccwav Mod',TempMessage)
+			await $.wait(10 * 1000);
+		}
 		if ($.isNode() && allMessage) {
 			var TempMessage=allMessage;
 			if(strAllNotify)
@@ -554,6 +645,24 @@ if(DisableIndex!=-1){
 			})
 			await $.wait(10 * 1000);
 		}
+		if ($.isNode() && allMessageMonthGp5) {
+			await notify.sendNotify(`京东月资产变动#5`, `${allMessageMonthGp5}`, {
+				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+			})
+			await $.wait(10 * 1000);
+		}
+		if ($.isNode() && allMessageMonthGp6) {
+			await notify.sendNotify(`京东月资产变动#6`, `${allMessageMonthGp6}`, {
+				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+			})
+			await $.wait(10 * 1000);
+		}
+		if ($.isNode() && allMessageMonthGp7) {
+			await notify.sendNotify(`京东月资产变动#7`, `${allMessageMonthGp7}`, {
+				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+			})
+			await $.wait(10 * 1000);
+		}
 		if ($.isNode() && allMessageMonth) {
 			await notify.sendNotify(`京东月资产变动`, `${allMessageMonth}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
@@ -579,6 +688,27 @@ if(DisableIndex!=-1){
 	if ($.isNode() && allMessage2Gp4) {
 		allMessage2Gp4 += RemainMessage;
 		await notify.sendNotify("京东白嫖榜#4", `${allMessage2Gp4}`, {
+			url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+		})
+		await $.wait(10 * 1000);
+	}
+	if ($.isNode() && allMessage2Gp5) {
+		allMessage2Gp5 += RemainMessage;
+		await notify.sendNotify("京东白嫖榜#5", `${allMessage2Gp5}`, {
+			url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+		})
+		await $.wait(10 * 1000);
+	}
+	if ($.isNode() && allMessage2Gp6) {
+		allMessage2Gp6 += RemainMessage;
+		await notify.sendNotify("京东白嫖榜#6", `${allMessage2Gp6}`, {
+			url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+		})
+		await $.wait(10 * 1000);
+	}
+	if ($.isNode() && allMessage2Gp7) {
+		allMessage2Gp7 += RemainMessage;
+		await notify.sendNotify("京东白嫖榜#7", `${allMessage2Gp7}`, {
 			url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
 		})
 		await $.wait(10 * 1000);
@@ -613,6 +743,15 @@ async function showMsg() {
 	if (MessageUserGp4) {
 		userIndex4 = MessageUserGp4.findIndex((item) => item === $.pt_pin);
 	}
+	if (MessageUserGp5) {
+		userIndex5 = MessageUserGp5.findIndex((item) => item === $.pt_pin);
+	}
+	if (MessageUserGp6) {
+		userIndex6 = MessageUserGp6.findIndex((item) => item === $.pt_pin);
+	}
+	if (MessageUserGp7) {
+		userIndex7 = MessageUserGp7.findIndex((item) => item === $.pt_pin);
+	}
 	
 	if (userIndex2 != -1) {
 		IndexGp2 += 1;
@@ -626,7 +765,19 @@ async function showMsg() {
 		IndexGp4 += 1;
 		ReturnMessageTitle = `【账号${IndexGp4}🆔】${$.nickName || $.UserName}\n`;
 	}
-	if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1) {
+	if (userIndex5 != -1) {
+		IndexGp5 += 1;
+		ReturnMessageTitle = `【账号${IndexGp5}🆔】${$.nickName || $.UserName}\n`;
+	}
+	if (userIndex6 != -1) {
+		IndexGp6 += 1;
+		ReturnMessageTitle = `【账号${IndexGp6}🆔】${$.nickName || $.UserName}\n`;
+	}
+	if (userIndex7 != -1) {
+		IndexGp7 += 1;
+		ReturnMessageTitle = `【账号${IndexGp7}🆔】${$.nickName || $.UserName}\n`;
+	}
+	if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1) {
 		IndexAll += 1;
 		ReturnMessageTitle = `【账号${IndexAll}🆔】${$.nickName || $.UserName}\n`;
 	}
@@ -682,7 +833,16 @@ async function showMsg() {
 		if (userIndex4 != -1) {
 			allMessageMonthGp4 += ReturnMessageMonth + `\n`;
 		}
-		if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1) {
+		if (userIndex5 != -1) {
+			allMessageMonthGp5 += ReturnMessageMonth + `\n`;
+		}
+		if (userIndex6 != -1) {
+			allMessageMonthGp6 += ReturnMessageMonth + `\n`;
+		}
+		if (userIndex7 != -1) {
+			allMessageMonthGp7 += ReturnMessageMonth + `\n`;
+		}
+		if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1) {
 			allMessageMonth += ReturnMessageMonth + `\n`;
 		}
 		if ($.isNode() && WP_APP_TOKEN_ONE) {
@@ -787,7 +947,16 @@ async function showMsg() {
 				if (userIndex4 != -1) {
 					ReceiveMessageGp4 += `【账号${IndexGp4} ${$.nickName || $.UserName}】${$.JdFarmProdName} (东东农场)\n`;
 				}
-				if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1) {
+				if (userIndex5 != -1) {
+					ReceiveMessageGp5 += `【账号${IndexGp5} ${$.nickName || $.UserName}】${$.JdFarmProdName} (东东农场)\n`;
+				}
+				if (userIndex6 != -1) {
+					ReceiveMessageGp6 += `【账号${IndexGp6} ${$.nickName || $.UserName}】${$.JdFarmProdName} (东东农场)\n`;
+				}
+				if (userIndex7 != -1) {
+					ReceiveMessageGp7 += `【账号${IndexGp7} ${$.nickName || $.UserName}】${$.JdFarmProdName} (东东农场)\n`;
+				}
+				if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1) {
 					allReceiveMessage += `【账号${IndexAll} ${$.nickName || $.UserName}】${$.JdFarmProdName} (东东农场)\n`;
 				}
 			} else {
@@ -811,7 +980,16 @@ async function showMsg() {
 				if (userIndex4 != -1) {
 					WarnMessageGp4 += `【账号${IndexGp4} ${$.nickName || $.UserName}】水果领取后未重新种植! (东东农场)\n`;
 				}
-				if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1) {
+				if (userIndex5 != -1) {
+					WarnMessageGp5 += `【账号${IndexGp5} ${$.nickName || $.UserName}】水果领取后未重新种植! (东东农场)\n`;
+				}
+				if (userIndex6 != -1) {
+					WarnMessageGp6 += `【账号${IndexGp6} ${$.nickName || $.UserName}】水果领取后未重新种植! (东东农场)\n`;
+				}
+				if (userIndex7 != -1) {
+					WarnMessageGp7 += `【账号${IndexGp7} ${$.nickName || $.UserName}】水果领取后未重新种植! (东东农场)\n`;
+				}
+				if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1) {
 					allWarnMessage += `【账号${IndexAll} ${$.nickName || $.UserName}】水果领取后未重新种植! (东东农场)\n`;
 				}
 
@@ -828,7 +1006,16 @@ async function showMsg() {
 				if (userIndex4 != -1) {
 					WarnMessageGp4 += `【账号${IndexGp4} ${$.nickName || $.UserName}】状态异常! (东东农场)\n`;
 				}
-				if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1) {
+				if (userIndex5 != -1) {
+					WarnMessageGp5 += `【账号${IndexGp5} ${$.nickName || $.UserName}】状态异常! (东东农场)\n`;
+				}
+				if (userIndex6 != -1) {
+					WarnMessageGp6 += `【账号${IndexGp6} ${$.nickName || $.UserName}】状态异常! (东东农场)\n`;
+				}
+				if (userIndex7 != -1) {
+					WarnMessageGp7 += `【账号${IndexGp7} ${$.nickName || $.UserName}】状态异常! (东东农场)\n`;
+				}
+				if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1) {
 					allWarnMessage += `【账号${IndexAll} ${$.nickName || $.UserName}】状态异常! (东东农场)\n`;
 				}
 				//ReturnMessage += `【东东农场】${$.JdFarmProdName}状态异常${$.treeState}...\n`;
@@ -851,7 +1038,16 @@ async function showMsg() {
 		if (userIndex4 != -1) {
 			ReceiveMessageGp4 += `【账号${IndexGp4} ${$.nickName || $.UserName}】${$.DdFactoryReceive} (东东工厂)\n`;
 		}
-		if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1) {
+		if (userIndex5 != -1) {
+			ReceiveMessageGp5 += `【账号${IndexGp5} ${$.nickName || $.UserName}】${$.DdFactoryReceive} (东东工厂)\n`;
+		}
+		if (userIndex6 != -1) {
+			ReceiveMessageGp6 += `【账号${IndexGp6} ${$.nickName || $.UserName}】${$.DdFactoryReceive} (东东工厂)\n`;
+		}
+		if (userIndex7 != -1) {
+			ReceiveMessageGp7 += `【账号${IndexGp7} ${$.nickName || $.UserName}】${$.DdFactoryReceive} (东东工厂)\n`;
+		}
+		if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1) {
 			allReceiveMessage += `【账号${IndexAll} ${$.nickName || $.UserName}】${$.DdFactoryReceive} (东东工厂)\n`;
 		}
 		TempBaipiao += `【东东工厂】${$.ddFactoryInfo} 可以兑换了!\n`;
@@ -866,7 +1062,16 @@ async function showMsg() {
 		if (userIndex4 != -1) {
 			ReceiveMessageGp4 += `【账号${IndexGp4} ${$.nickName || $.UserName}】${$.jxFactoryReceive} (京喜工厂)\n`;
 		}
-		if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1) {
+		if (userIndex5 != -1) {
+			ReceiveMessageGp5 += `【账号${IndexGp5} ${$.nickName || $.UserName}】${$.jxFactoryReceive} (京喜工厂)\n`;
+		}
+		if (userIndex6 != -1) {
+			ReceiveMessageGp6 += `【账号${IndexGp6} ${$.nickName || $.UserName}】${$.jxFactoryReceive} (京喜工厂)\n`;
+		}
+		if (userIndex7 != -1) {
+			ReceiveMessageGp7 += `【账号${IndexGp7} ${$.nickName || $.UserName}】${$.jxFactoryReceive} (京喜工厂)\n`;
+		}
+		if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1) {
 			allReceiveMessage += `【账号${IndexAll} ${$.nickName || $.UserName}】${$.jxFactoryReceive} (京喜工厂)\n`;
 		}
 
@@ -884,7 +1089,16 @@ async function showMsg() {
 		if (userIndex4 != -1) {
 			ReceiveMessageGp4 += `【账号${IndexGp4} ${$.nickName || $.UserName}】${$.PigPet} (金融养猪)\n`;
 		}
-		if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1) {
+		if (userIndex5 != -1) {
+			ReceiveMessageGp5 += `【账号${IndexGp5} ${$.nickName || $.UserName}】${$.PigPet} (金融养猪)\n`;
+		}
+		if (userIndex6 != -1) {
+			ReceiveMessageGp6 += `【账号${IndexGp6} ${$.nickName || $.UserName}】${$.PigPet} (金融养猪)\n`;
+		}
+		if (userIndex7 != -1) {
+			ReceiveMessageGp7 += `【账号${IndexGp7} ${$.nickName || $.UserName}】${$.PigPet} (金融养猪)\n`;
+		}
+		if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1) {
 			allReceiveMessage += `【账号${IndexAll} ${$.nickName || $.UserName}】${$.PigPet} (金融养猪)\n`;
 		}
 
@@ -921,7 +1135,16 @@ async function showMsg() {
 					if (userIndex4 != -1) {
 						ReceiveMessageGp4 += `【账号${IndexGp4} ${$.nickName || $.UserName}】${$.petInfo.goodsInfo.goodsName}可以兑换了! (东东萌宠)\n`;
 					}
-					if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1) {
+					if (userIndex5 != -1) {
+						ReceiveMessageGp5 += `【账号${IndexGp5} ${$.nickName || $.UserName}】${$.petInfo.goodsInfo.goodsName}可以兑换了! (东东萌宠)\n`;
+					}
+					if (userIndex6 != -1) {
+						ReceiveMessageGp6 += `【账号${IndexGp6} ${$.nickName || $.UserName}】${$.petInfo.goodsInfo.goodsName}可以兑换了! (东东萌宠)\n`;
+					}
+					if (userIndex7 != -1) {
+						ReceiveMessageGp7 += `【账号${IndexGp7} ${$.nickName || $.UserName}】${$.petInfo.goodsInfo.goodsName}可以兑换了! (东东萌宠)\n`;
+					}
+					if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1) {
 						allReceiveMessage += `【账号${IndexAll} ${$.nickName || $.UserName}】${$.petInfo.goodsInfo.goodsName}可以兑换了! (东东萌宠)\n`;
 					}
 				} else if ($.petInfo.petStatus === 6) {
@@ -935,7 +1158,16 @@ async function showMsg() {
 					if (userIndex4 != -1) {
 						WarnMessageGp4 += `【账号${IndexGp4} ${$.nickName || $.UserName}】未选择物品! (东东萌宠)\n`;
 					}
-					if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1) {
+					if (userIndex5 != -1) {
+						WarnMessageGp5 += `【账号${IndexGp5} ${$.nickName || $.UserName}】未选择物品! (东东萌宠)\n`;
+					}
+					if (userIndex6 != -1) {
+						WarnMessageGp6 += `【账号${IndexGp6} ${$.nickName || $.UserName}】未选择物品! (东东萌宠)\n`;
+					}
+					if (userIndex7 != -1) {
+						WarnMessageGp7 += `【账号${IndexGp7} ${$.nickName || $.UserName}】未选择物品! (东东萌宠)\n`;
+					}
+					if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1) {
 						allWarnMessage += `【账号${IndexAll} ${$.nickName || $.UserName}】未选择物品! (东东萌宠)\n`;
 					}
 				} else if (response.resultCode === '0') {
@@ -953,7 +1185,16 @@ async function showMsg() {
 					if (userIndex4 != -1) {
 						WarnMessageGp4 += `【账号${IndexGp4} ${$.nickName || $.UserName}】暂未选购新的商品! (东东萌宠)\n`;
 					}
-					if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1) {
+					if (userIndex5 != -1) {
+						WarnMessageGp5 += `【账号${IndexGp5} ${$.nickName || $.UserName}】暂未选购新的商品! (东东萌宠)\n`;
+					}
+					if (userIndex6 != -1) {
+						WarnMessageGp6 += `【账号${IndexGp6} ${$.nickName || $.UserName}】暂未选购新的商品! (东东萌宠)\n`;
+					}
+					if (userIndex7 != -1) {
+						WarnMessageGp7 += `【账号${IndexGp7} ${$.nickName || $.UserName}】暂未选购新的商品! (东东萌宠)\n`;
+					}
+					if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1) {
 						allWarnMessage += `【账号${IndexAll} ${$.nickName || $.UserName}】暂未选购新的商品! (东东萌宠)\n`;
 					}
 
@@ -996,7 +1237,16 @@ async function showMsg() {
 	if (userIndex4 != -1) {
 		allMessageGp4 += ReturnMessageTitle+ReturnMessage + `\n`;
 	}
-	if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1) {
+	if (userIndex5 != -1) {
+		allMessageGp5 += ReturnMessageTitle+ReturnMessage + `\n`;
+	}
+	if (userIndex6 != -1) {
+		allMessageGp6 += ReturnMessageTitle+ReturnMessage + `\n`;
+	}
+	if (userIndex7 != -1) {
+		allMessageGp7 += ReturnMessageTitle+ReturnMessage + `\n`;
+	}
+	if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1) {
 		allMessage += ReturnMessageTitle+ReturnMessage + `\n`;
 	}
 
