@@ -521,7 +521,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
         const titleIndexGp5 = notifyGroup5List.findIndex((item) => item === strTitle);
         const notifyGroup6List = process.env.NOTIFY_GROUP6_LIST ? process.env.NOTIFY_GROUP6_LIST.split('&') : [];
         const titleIndexGp6 = notifyGroup6List.findIndex((item) => item === strTitle);
-	const notifyGroup7List = process.env.NOTIFY_GROUP7_LIST ? process.env.NOTIFY_GROUP7_LIST.split('&') : [];
+		const notifyGroup7List = process.env.NOTIFY_GROUP7_LIST ? process.env.NOTIFY_GROUP7_LIST.split('&') : [];
         const titleIndexGp7 = notifyGroup7List.findIndex((item) => item === strTitle);
 		
         if (titleIndex2 !== -1) {
@@ -544,7 +544,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
             console.log(`${strTitle} 在群组6推送名单中，初始化群组推送`);
             UseGroupNotify = 6;
         }
-	if (titleIndexGp7 !== -1) {
+		if (titleIndexGp7 !== -1) {
             console.log(`${strTitle} 在群组7推送名单中，初始化群组推送`);
             UseGroupNotify = 7;
         }
@@ -583,7 +583,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                             console.log("自定义设定强制使用组6配置通知...");
                             UseGroupNotify = 6;
                         }
-			if (strCustomTempArr[1] == "组7") {
+						if (strCustomTempArr[1] == "组7") {
                             console.log("自定义设定强制使用组6配置通知...");
                             UseGroupNotify = 7;
                         }
@@ -660,10 +660,6 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
 
         //console.log("UseGroup2 :"+UseGroup2);
         //console.log("UseGroup3 :"+UseGroup3);
-	//console.log("UseGroup4 :"+UseGroup4);
-	//console.log("UseGroup5 :"+UseGroup5);
-	//console.log("UseGroup6 :"+UseGroup6);
-	//console.log("UseGroup7 :"+UseGroup7);
 
 
         switch (UseGroupNotify) {
@@ -1491,24 +1487,12 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                         if (ShowRemarkType == "3") {
                             $.Remark = $.UserName + "(" + $.Remark + ")";
                         }
-			if (ShowRemarkType == "4") {
-                            $.Remark = $.UserName + "(" + $.Remark + ")";
-                        }
-			if (ShowRemarkType == "5") {
-                            $.Remark = $.UserName + "(" + $.Remark + ")";
-                        }
-			if (ShowRemarkType == "6") {
-                            $.Remark = $.UserName + "(" + $.Remark + ")";
-                        }
-			if (ShowRemarkType == "7") {
-                            $.Remark = $.UserName + "(" + $.Remark + ")";
-                        }
 
                         try {
                             //额外处理1，nickName包含星号
                             $.nickName = $.nickName.replace(new RegExp(`[*]`, 'gm'), "[*]");
                             text = text.replace(new RegExp(`${$.UserName}|${$.nickName}`, 'gm'), $.Remark);
-                            if (text == "京东资产变动" || text == "京东资产变动#2" || text == "京东资产变动#3" || text == "京东资产变动#4" || text == "京东资产变动#5" || text == "京东资产变动#6" || text == "京东资产变动#7") {
+                            if (text == "京东资产变动" || text == "京东资产变动#2" || text == "京东资产变动#3" || text == "京东资产变动#4") {
                                 var Tempinfo = "";
 								if(envs[i].created)
 									Tempinfo=getQLinfo(cookie, envs[i].created, envs[i].timestamp, envs[i].remarks);
@@ -1632,8 +1616,8 @@ function getuuid(strRemark, PtPin) {
             var TempRemarkList = strRemark.split("@@");
             for (let j = 1; j < TempRemarkList.length; j++) {
                 if (TempRemarkList[j]) {
-                    if (TempRemarkList[j].length > 7) {
-                        if (TempRemarkList[j].substring(0, 7) == "UID_") {
+                    if (TempRemarkList[j].length > 4) {
+                        if (TempRemarkList[j].substring(0, 4) == "UID_") {
                             strTempuuid = TempRemarkList[j];
                             break;
                         }
