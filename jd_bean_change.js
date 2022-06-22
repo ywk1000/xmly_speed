@@ -45,6 +45,30 @@ let allMessageMonthGp4 = '';
 let allMessage2Gp4 = '';
 let IndexGp4 = 0;
 
+let MessageUserGp5 = '';
+let ReceiveMessageGp5 = '';
+let WarnMessageGp5 = '';
+let allMessageGp5 = '';
+let allMessageMonthGp5 = '';
+let allMessage2Gp5 = '';
+let IndexGp5 = 0;
+
+let MessageUserGp6 = '';
+let ReceiveMessageGp6 = '';
+let WarnMessageGp6 = '';
+let allMessageGp6 = '';
+let allMessageMonthGp6 = '';
+let allMessage2Gp6 = '';
+let IndexGp6 = 0;
+
+let MessageUserGp7 = '';
+let ReceiveMessageGp7 = '';
+let WarnMessageGp7 = '';
+let allMessageGp7 = '';
+let allMessageMonthGp7 = '';
+let allMessage2Gp7 = '';
+let IndexGp7 = 0;
+
 let notifySkipList = "";
 let IndexAll = 0;
 let EnableMonth = "false";
