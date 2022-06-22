@@ -342,8 +342,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
 								if ($.isNode() && process.env.BEANCHANGE_USERGP7) {
                                     MessageUserGp7 = process.env.BEANCHANGE_USERGP7 ? process.env.BEANCHANGE_USERGP7.split('&') : [];
                                 }
-
-
+								
 								if (MessageUserGp7) {
                                     userIndex7 = MessageUserGp7.findIndex((item) => item === strPtPin);
                                 }
