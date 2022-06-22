@@ -154,7 +154,7 @@ if ($.isNode() && process.env.BEANCHANGE_USERGP5) {
 if ($.isNode() && process.env.BEANCHANGE_USERGP6) {
 	MessageUserGp6 = process.env.BEANCHANGE_USERGP6 ? process.env.BEANCHANGE_USERGP6.split('&') : [];
 	intPerSent = 0; //分组推送，禁用账户拆分
-	console.log(`检测到设定了分组推送6将禁用分段通知`);
+	console.log(`检测到设定了分组推送6,将禁用分段通知`);
 }
 
 if ($.isNode() && process.env.BEANCHANGE_USERGP7) {
