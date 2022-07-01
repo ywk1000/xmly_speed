@@ -307,16 +307,18 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                                 var MessageUserGp2 = "";
                                 var MessageUserGp3 = "";
                                 var MessageUserGp4 = "";
-				var MessageUserGp5 = "";
-				var MessageUserGp6 = "";
-				var MessageUserGp7 = "";
+                                var MessageUserGp5 = "";
+                                var MessageUserGp6 = "";
+                                var MessageUserGp7 = "";
+                                var MessageUserGp8 = "";
 
                                 var userIndex2 = -1;
                                 var userIndex3 = -1;
                                 var userIndex4 = -1;
-				var userIndex5 = -1;
-				var userIndex6 = -1;
-				var userIndex7 = -1;
+                                var userIndex5 = -1;
+                                var userIndex6 = -1;
+                                var userIndex7 = -1;
+                                var userIndex8 = -1;
 
                                 var strNotifyOneTemp = "";
                                 if ($.isNode() && process.env.BEANCHANGE_USERGP2) {
@@ -330,26 +332,33 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                                 if ($.isNode() && process.env.BEANCHANGE_USERGP4) {
                                     MessageUserGp4 = process.env.BEANCHANGE_USERGP4 ? process.env.BEANCHANGE_USERGP4.split('&') : [];
                                 }
-								
-				if ($.isNode() && process.env.BEANCHANGE_USERGP5) {
+
+                                if ($.isNode() && process.env.BEANCHANGE_USERGP5) {
                                     MessageUserGp5 = process.env.BEANCHANGE_USERGP5 ? process.env.BEANCHANGE_USERGP5.split('&') : [];
                                 }
-						
-				if ($.isNode() && process.env.BEANCHANGE_USERGP6) {
+
+                                if ($.isNode() && process.env.BEANCHANGE_USERGP6) {
                                     MessageUserGp6 = process.env.BEANCHANGE_USERGP6 ? process.env.BEANCHANGE_USERGP6.split('&') : [];
                                 }
-								
-				if ($.isNode() && process.env.BEANCHANGE_USERGP7) {
+
+                                if ($.isNode() && process.env.BEANCHANGE_USERGP7) {
                                     MessageUserGp7 = process.env.BEANCHANGE_USERGP7 ? process.env.BEANCHANGE_USERGP7.split('&') : [];
                                 }
+
+                                if ($.isNode() && process.env.BEANCHANGE_USERGP8) {
+                                    MessageUserGp8 = process.env.BEANCHANGE_USERGP8 ? process.env.BEANCHANGE_USERGP8.split('&') : [];
+                                }
 								
-				if (MessageUserGp7) {
+                                if (MessageUserGp8) {
+                                    userIndex8 = MessageUserGp8.findIndex((item) => item === strPtPin);
+                                }
+                                if (MessageUserGp7) {
                                     userIndex7 = MessageUserGp7.findIndex((item) => item === strPtPin);
                                 }
-				if (MessageUserGp6) {
+                                if (MessageUserGp6) {
                                     userIndex6 = MessageUserGp6.findIndex((item) => item === strPtPin);
                                 }
-				if (MessageUserGp5) {
+                                if (MessageUserGp5) {
                                     userIndex5 = MessageUserGp5.findIndex((item) => item === strPtPin);
                                 }
                                 if (MessageUserGp4) {
@@ -374,7 +383,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                                     console.log(`该账号属于分组4`);
                                     text = "京东CK检测#4";
                                 }
-				if (userIndex5 != -1) {
+                                if (userIndex5 != -1) {
                                     console.log(`该账号属于分组5`);
                                     text = "京东CK检测#5";
                                 }
@@ -386,7 +395,11 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                                     console.log(`该账号属于分组7`);
                                     text = "京东CK检测#7";
                                 }
-                                if (userIndex7 == -1 && userIndex6 == -1 && userIndex5 == -1 && userIndex4 == -1 && userIndex2 == -1 && userIndex3 == -1) {
+                                if (userIndex8 != -1) {
+                                    console.log(`该账号属于分组8`);
+                                    text = "京东CK检测#8";
+                                }
+                                if (userIndex8 == -1 && userIndex7 == -1 && userIndex6 == -1 && userIndex5 == -1 && userIndex4 == -1 && userIndex2 == -1 && userIndex3 == -1) {
                                     text = "京东CK检测";
                                 }
                                 if (process.env.CHECKCK_ALLNOTIFY) {
