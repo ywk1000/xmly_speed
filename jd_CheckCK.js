@@ -161,7 +161,6 @@ if ($.isNode() && process.env.BEANCHANGE_USERGp7) {
     console.log(`检测到设定了分组推送7`);
 }
 
-
 if ($.isNode() && process.env.BEANCHANGE_USERGp8) {
     MessageUserGp8 = process.env.BEANCHANGE_USERGp8 ? process.env.BEANCHANGE_USERGp8.split('&') : [];
     console.log(`检测到设定了分组推送8`);
@@ -272,15 +271,18 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 console.log(`账号属于分组5`);
                 IndexGp5 += 1;
                 ReturnMessageTitle = `【账号${IndexGp5}🆔】${$.UserName2}`;
-            }if (userIndex6 != -1) {
+            }
+            if (userIndex6 != -1) {
                 console.log(`账号属于分组6`);
                 IndexGp6 += 1;
                 ReturnMessageTitle = `【账号${IndexGp6}🆔】${$.UserName2}`;
-            }if (userIndex7 != -1) {
+            }
+            if (userIndex7 != -1) {
                 console.log(`账号属于分组7`);
                 IndexGp7 += 1;
                 ReturnMessageTitle = `【账号${IndexGp7}🆔】${$.UserName2}`;
-            }if (userIndex8 != -1) {
+            }
+            if (userIndex8 != -1) {
                 console.log(`账号属于分组8`);
                 IndexGp8 += 1;
                 ReturnMessageTitle = `【账号${IndexGp8}🆔】${$.UserName2}`;
@@ -522,6 +524,7 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 })
             }
         }
+		
         if (MessageUserGp4) {
             if (OErrorMessageGp4) {
                 allMessageGp4 += `👇👇👇👇👇检测出错账号👇👇👇👇👇\n` + OErrorMessageGp4 + `\n\n`;
