@@ -283,7 +283,7 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
             }
             }if (userIndex8 != -1) {
                 console.log(`账号属于分组8`);
-                IndexGp7 += 1;
+                IndexGp8 += 1;
                 ReturnMessageTitle = `【账号${IndexGp8}🆔】${$.UserName2}`;
             }
             if (userIndex4 == -1 && userIndex2 == -1 && userIndex3 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1 && userIndex8 == -1) {
@@ -710,7 +710,6 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                     url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
                 })
             }
-        }
         }
         if (OErrorMessage) {
             allMessage += `👇👇👇👇👇检测出错账号👇👇👇👇👇\n` + OErrorMessage + `\n\n`;
