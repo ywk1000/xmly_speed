@@ -32,6 +32,7 @@ let MessageUserGp4 = "";
 let MessageUserGp5 = "";
 let MessageUserGp6 = "";
 let MessageUserGp7 = "";
+let MessageUserGp8 = "";
 
 let MessageGp2 = "";
 let MessageGp3 = "";
@@ -39,6 +40,7 @@ let MessageGp4 = "";
 let MessageGp5 = "";
 let MessageGp6 = "";
 let MessageGp7 = "";
+let MessageGp8 = "";
 let MessageAll = "";
 
 let userIndex2 = -1;
@@ -47,6 +49,7 @@ let userIndex4 = -1;
 let userIndex5 = -1;
 let userIndex6 = -1;
 let userIndex7 = -1;
+let userIndex8 = -1;
 
 let IndexGp2 = 0;
 let IndexGp3 = 0;
@@ -54,6 +57,7 @@ let IndexGp4 = 0;
 let IndexGp5 = 0;
 let IndexGp6 = 0;
 let IndexGp7 = 0;
+let IndexGp8 = 0;
 let IndexAll = 0;
 
 let TempErrorMessage = '',
@@ -111,6 +115,13 @@ DisableMessageGp7 = '',
 EnableMessageGp7 = '',
 OErrorMessageGp7 = '';
 
+let allMessageGp8 = '',
+ErrorMessageGp8 = '',
+SuccessMessageGp8 = '',
+DisableMessageGp8 = '',
+EnableMessageGp8 = '',
+OErrorMessageGp8 = '';
+
 let strAllNotify = "";
 let strNotifyOneTemp = "";
 let WP_APP_TOKEN_ONE = "";
@@ -148,6 +159,12 @@ if ($.isNode() && process.env.BEANCHANGE_USERGP6) {
 if ($.isNode() && process.env.BEANCHANGE_USERGp7) {
     MessageUserGp7 = process.env.BEANCHANGE_USERGp7 ? process.env.BEANCHANGE_USERGp7.split('&') : [];
     console.log(`检测到设定了分组推送7`);
+}
+
+
+if ($.isNode() && process.env.BEANCHANGE_USERGp8) {
+    MessageUserGp8 = process.env.BEANCHANGE_USERGp8 ? process.env.BEANCHANGE_USERGp8.split('&') : [];
+    console.log(`检测到设定了分组推送8`);
 }
 
 if ($.isNode() && process.env.CHECKCK_SHOWSUCCESSCK) {
@@ -231,6 +248,10 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
 
                 userIndex7 = MessageUserGp7.findIndex((item) => item === $.UserName);
             }
+            if (MessageUserGp8) {
+
+                userIndex8 = MessageUserGp8.findIndex((item) => item === $.UserName);
+            }
 
             if (userIndex2 != -1) {
                 console.log(`账号属于分组2`);
@@ -260,7 +281,12 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 IndexGp7 += 1;
                 ReturnMessageTitle = `【账号${IndexGp7}🆔】${$.UserName2}`;
             }
-            if (userIndex4 == -1 && userIndex2 == -1 && userIndex3 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1) {
+            }if (userIndex8 != -1) {
+                console.log(`账号属于分组8`);
+                IndexGp7 += 1;
+                ReturnMessageTitle = `【账号${IndexGp8}🆔】${$.UserName2}`;
+            }
+            if (userIndex4 == -1 && userIndex2 == -1 && userIndex3 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1 && userIndex8 == -1) {
                 console.log(`账号没有分组`);
                 IndexAll += 1;
                 ReturnMessageTitle = `【账号${IndexAll}🆔】${$.UserName2}`;
@@ -395,8 +421,14 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 EnableMessageGp7 += TempEnableMessage;
                 OErrorMessageGp7 += TempOErrorMessage;
             }
-
-            if (userIndex4 == -1 && userIndex2 == -1 && userIndex3 == -1 && userIndex7 == -1 && userIndex6 == -1 && userIndex5 == -1) {
+            if (userIndex8 != -1) {
+                ErrorMessageGp8 += TempErrorMessage;
+                SuccessMessageGp8 += TempSuccessMessage;
+                DisableMessageGp8 += TempDisableMessage;
+                EnableMessageGp8 += TempEnableMessage;
+                OErrorMessageGp8 += TempOErrorMessage;
+            }
+            if (userIndex4 == -1 && userIndex2 == -1 && userIndex3 == -1 && userIndex7 == -1 && userIndex6 == -1 && userIndex5 == -1 && userIndex8 == -1) {
                 ErrorMessage += TempErrorMessage;
                 SuccessMessage += TempSuccessMessage;
                 DisableMessage += TempDisableMessage;
@@ -653,6 +685,32 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                     url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
                 })
             }
+            
+            if (ErrorMessageGp8) {
+                allMessageGp8 += `👇👇👇👇👇失效账号👇👇👇👇👇\n` + ErrorMessageGp8 + `\n\n`;
+            } else {
+                allMessageGp8 += `👇👇👇👇👇失效账号👇👇👇👇👇\n 一个失效的都没有呢，羡慕啊...\n\n`;
+            }
+
+            if (ShowSuccess == "true" && SuccessMessage) {
+                allMessageGp8 += `👇👇👇👇👇有效账号👇👇👇👇👇\n` + SuccessMessageGp8 + `\n`;
+            }
+
+            if (NoWarnError == "true") {
+                OErrorMessageGp8 = "";
+            }
+
+            if ($.isNode() && (EnableMessageGp8 || DisableMessageGp8 || OErrorMessageGp8 || CKAlwaysNotify == "true")) {
+                console.log("京东CK检测#8：");
+                console.log(allMessageGp8);
+                if (strAllNotify)
+                    allMessageGp8 += `\n` + strAllNotify;
+
+                await notify.sendNotify("京东CK检测#8", `${allMessageGp8}`, {
+                    url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+                })
+            }
+        }
         }
         if (OErrorMessage) {
             allMessage += `👇👇👇👇👇检测出错账号👇👇👇👇👇\n` + OErrorMessage + `\n\n`;
