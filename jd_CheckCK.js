@@ -685,7 +685,23 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                     url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
                 })
             }
-            
+        }
+		
+        if (MessageUserGp8) {
+            if (OErrorMessageGp8) {
+                allMessageGp8 += `👇👇👇👇👇检测出错账号👇👇👇👇👇\n` + OErrorMessageGp8 + `\n\n`;
+            }
+            if (DisableMessageGp8) {
+                allMessageGp8 += `👇👇👇👇👇自动禁用账号👇👇👇👇👇\n` + DisableMessageGp8 + `\n\n`;
+            }
+            if (EnableMessageGp8) {
+                if (CKAutoEnable == "true") {
+                    allMessageGp8 += `👇👇👇👇👇自动启用账号👇👇👇👇👇\n` + EnableMessageGp8 + `\n\n`;
+                } else {
+                    allMessageGp8 += `👇👇👇👇👇账号已恢复👇👇👇👇👇\n` + EnableMessageGp8 + `\n\n`;
+                }
+            }
+
             if (ErrorMessageGp8) {
                 allMessageGp8 += `👇👇👇👇👇失效账号👇👇👇👇👇\n` + ErrorMessageGp8 + `\n\n`;
             } else {
@@ -711,6 +727,7 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 })
             }
         }
+		
         if (OErrorMessage) {
             allMessage += `👇👇👇👇👇检测出错账号👇👇👇👇👇\n` + OErrorMessage + `\n\n`;
         }
