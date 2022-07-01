@@ -50,7 +50,7 @@ pnpm add -g pnpm
 
 pnpm install -g
 
-npm install -g npm png-js date-fns axios crypto-js ts-md5 tslib @types/node requests tough-cookie jsdom download tunnel fs ws form-data
+npm install -g npm png-js date-fns axios crypto-js ts-md5 tslib @types/node requests tough-cookie jsdom download tunnel fs ws form-data typescript
 
 pnpm install -g js-base64 qrcode-terminal silly-datetime
 
