@@ -280,7 +280,6 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 console.log(`账号属于分组7`);
                 IndexGp7 += 1;
                 ReturnMessageTitle = `【账号${IndexGp7}🆔】${$.UserName2}`;
-            }
             }if (userIndex8 != -1) {
                 console.log(`账号属于分组8`);
                 IndexGp8 += 1;
