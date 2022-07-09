@@ -15,10 +15,10 @@ class WeChat:
     
     #初始化参数
     def __init__(self):
-        self.CORPID = ''  #企业ID，在管理后台获取
-        self.CORPSECRET = ''#自建应用的Secret，每个自建应用里都有单独的secret 
-        self.AGENTID = ''  #应用ID，在后台应用中获取
-        self.TOUSER = ""  # 接收者用户名,多个用户用|分割
+        self.CORPID = 'wwe5aa4d328933b978'  #企业ID，在管理后台获取
+        self.CORPSECRET = 'JuVDMc9VXZqFUS6r7R_J1WlVOJjRN2hwSRkJnGJLRQo'#自建应用的Secret，每个自建应用里都有单独的secret 
+        self.AGENTID = '1000010'  #应用ID，在后台应用中获取
+        self.TOUSER = "@all"  # 接收者用户名,多个用户用|分割
         
     def _get_access_token(self):
         url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken'
