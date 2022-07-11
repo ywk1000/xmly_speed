@@ -52,9 +52,9 @@ pnpm install -g
 
 npm install -g npm png-js date-fns axios crypto-js ts-md5 tslib @types/node requests tough-cookie jsdom download tunnel fs ws form-data
 
-pnpm install -g js-base64 qrcode-terminal silly-datetime typescript depend
+pnpm install -g js-base64 qrcode-terminal silly-datetime typescript
 
-pip3 install requests PyExecJS
+pip3 install requests PyExecJS dependy
 
 cd /ql/data/scripts/ && apk add --no-cache build-base g++ cairo-dev pango-dev giflib-dev && npm i && npm i -S ts-node typescript @types/node date-fns axios png-js canvas --build-from-source
 cd /ql
