@@ -38,11 +38,9 @@ class jd:
     jump_cookies=["111"]
     # 添加cookie  os.environ["JD_COOKIE"].split("&")
     cookie = os.environ["JD_COOKIE"].split("&")  # 青龙面板的cookie获取
-
+    #cookie =['']
     # 本地设置cookie
-    # 必要的参数
-    jda = '__jda=122270672.16566350834601262111430.1656635083.1666635083.1656635083.7'
-    # cookie = ['']
+    # cookie = [""]
     # 查询数据申请的标题和商品id
     def query_num(self, page, tabId):
         data2 = 'ext={"prstate":"0"}&appid=newtry&functionId=try_feedsList&uuid=0333464346265636-3653664323631603&clientVersion=10.5.0&client=wh5&osVersion=10&area=22_1930_49322_49429&networkType=wifi&body={"geo":{"lng":103.997301,"lat":30.517789},"tabId":' + str(
@@ -52,6 +50,7 @@ class jd:
             return print("json返回为空")
         res_json = json.loads(res)
         feedList = res_json["data"]["feedList"]
+        print(res_json)
         # 循环遍历数据，获取试用id和标题
         for i in range(0, len(feedList)):
             try:
@@ -60,6 +59,7 @@ class jd:
                 sku_price = float(feedList[i]["jdPrice"])
                 sku = feedList[i]["sku"]
                 tagList = feedList[i]["tagList"]
+
                 self.filter(trialActivityId, skuTitle, sku_price, sku, tagList)
             except:
                 print("没获取到")
@@ -100,12 +100,13 @@ class jd:
     def apply_goods(self, goods_ids):
         for i in goods_ids:
             goods_id = i["trialActivityId"]
+            print(i)
             u = 0
             ck = []
             for cookie in self.cookie:
                 self.gl_cookie(cookie,ck)
             for c in ck:
-                self.header["Cookie"] = c.strip()+self.jda
+                self.header["Cookie"] = c.strip()
                 self.header["Referer"] = "https://pro.m.jd.com/mall/active/3mpGVQDhvLsMvKfZZumWPQyWt83L/index.html?activityId="+str(goods_id)
                 apply_header = self.header
                 # self.add_goods(c.strip(), i["sku"])
@@ -200,15 +201,13 @@ class jd:
         time.sleep(1)
         data = 'appid=newtry&functionId=try_detail&uuid=&clientVersion=&client=wh5&osVersion=13.2.3&area=&networkType=&body='+'{"activityId":"'+str(activityid)+'","previewTime":""}'
         res = requests.post("https://api.m.jd.com/client.action HTTP/1.1", data=data,headers=header)
-        # print(res.text)
+        print(res.text)
 
     #过滤已经申请的id
     def gl_id(self, ary_id, sqID):
         for i in sqID:
             if(i["trialActivityId"] in ary_id):
                 print("存在" + str(i["trialActivityId"]))
-            elif(str(i["trialActivityId"]) in str(self.sq_nym)):
-                return ""
             else:
                 self.sq_nym.append(i)
 
@@ -226,7 +225,7 @@ class jd:
             'Content-Type': 'application/x-www-form-urlencoded',
             'User-Agent': 'jdapp;android;10.5.0;;;appBuild/95837;ef/1;ep/%7B%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22ts%22%3A1650000135503%2C%22ridx%22%3A-1%2C%22cipher%22%3A%7B%22sv%22%3A%22CJK%3D%22%2C%22ad%22%3A%22CNDuDQHsZWDtDWY0CtZrCK%3D%3D%22%2C%22od%22%3A%22CtqmCwYyEJOzCtO1DJGmCK%3D%3D%22%2C%22ov%22%3A%22Ctu%3D%22%2C%22ud%22%3A%22CNDuDQHsZWDtDWY0CtZrCK%3D%3D%22%7D%2C%22ciphertype%22%3A5%2C%22version%22%3A%221.2.0%22%2C%22appname%22%3A%22com.jingdong.app.mall%22%7D;jdSupportDarkMode/0;Mozilla/5.0 (Linux; Android 10; MI 8 Build/QKQ1.190828.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045745 Mobile Safari/537.36',
             "Accept-Language": "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
-            "Cookie": self.cookie[0]+self.jda
+            "Cookie": self.cookie[0]
         }
         for j in self.tabId:
         # 循环查询页数
@@ -246,7 +245,7 @@ class jd:
         self.gl_id(self.ary_id,self.sqID)
         print(self.sq_nym)
         print(len(self.sq_nym))
-        self.apply_goods(self.sq_nym)
+        # self.apply_goods(self.sq_nym)
 
 
 jd()
