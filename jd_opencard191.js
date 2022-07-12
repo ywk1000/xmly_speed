@@ -35,9 +35,9 @@ cron:
  https://raw.githubusercontent.com/smiek2121/scripts/master/gua_opencard191.js, tag=7.12~7.20 Love Summer  FUN肆去浪, enabled=true
 
 */
-let guaopencard_addSku = 'false' // 加购
+let guaopencard_addSku = 'true' // 加购
 let guaopencard = 'false' // 执行
-let guaopenwait = 0 // 等待（秒）
+let guaopenwait = 100 // 等待（秒）
 let guaopencard_draw = 0 // 抽奖次数
 
 const $ = new Env('7.12~7.20 Love Summer  FUN肆去浪')
