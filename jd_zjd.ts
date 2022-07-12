@@ -23,7 +23,7 @@ interface Tuan {
 !(async () => {
   let cookiesArr: string[] = await requireConfig(false)
   for (let [index, value] of cookiesArr.entries()) {
-	if(index < 20){
+	if(index < 30){
 	try {
       await zjdInit()
       cookie = value
