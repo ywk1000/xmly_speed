@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## Build 20220222-001-test
+## Build 20220831-001-test
 
 name_js=(
   jd_fruit
@@ -99,17 +99,23 @@ var_name=(
 )
 
 local_scr=$1
+relative_path="${local_scr%/*}"
 repo_dir=""
 sub_dir_scripts="$(ls -l $dir_scripts |awk '/^d/ {print $NF}')"
-if [[ ! $local_scr =~ "/" ]] || [[ $local_scr == $dir_scripts/[^/]* ]]; then
+if [[ ! -z ${relative_path} ]] && [[ ${local_scr} =~ "/" ]]; then
     local_scr_name="$(echo ${local_scr##*/})"
-    local_scr_dir="$dir_scripts"
-elif [[ $local_scr == */* ]] && [[ ! $local_scr =~ ql ]]; then
-    local_scr_name="$(echo ${local_scr##*/})"
-    repo_dir="$(echo $local_scr | awk -F '/' '{print $(NF-1)}')"
-    [[ $sub_dir_scripts[@] =~ $repo_dir ]] && local_scr_dir="$dir_scripts/$repo_dir"
+    if [[ ${relative_path} =~ "$dir_scripts" ]]; then
+        repo_dir="$(echo ${relative_path#$dir_scripts} | awk -F '/' '{print $(NF)}')"
+        local_scr_dir="${relative_path}"
+    elif [[ ${relative_path} =~ "/ql/" ]]; then
+        local_scr_dir="$dir_scripts"
+    else
+        repo_dir="$(echo $local_scr | awk -F '/' '{print $(NF-1)}')"
+        local_scr_dir="$dir_scripts/${repo_dir}"
+    fi
 else
-    local_scr_dir=""
+    local_scr_name=$local_scr
+    local_scr_dir="$dir_scripts"
 fi
 
 ## 选择python3还是node
@@ -130,35 +136,40 @@ define_program() {
 
 # 定义 json 数据查询工具
 def_envs_tool(){
+    local i
     for i in $@; do
-        curl -s --noproxy "*" "http://0.0.0.0:5600/api/envs?searchValue=$i" -H "Authorization: Bearer $token" | jq .data | perl -pe "{s|^\[\|\]$||g; s|\n||g; s|\},$|\}\n|g}"
+        local token=$(cat $file_auth_user | jq -r .token)
+        curl -s --noproxy "*" "http://0.0.0.0:5600/api/envs?searchValue=$i" -H "Authorization: Bearer $token" | jq .data
     done
 }
 
 def_json_total(){
-    def_envs_tool $1 | jq -r .$2
+    def_envs_tool $1 | jq .[].$2 | tr -d '[]," '
+}
+
+def_json_grep_match(){
+    def_envs_tool $1 | jq .[] | perl -pe '{s|([^}])\n|\1|g}' | grep "$3" | jq .$2 | tr -d '[]," '
 }
 
 def_json(){
-    def_envs_tool $1 | grep "$3" | jq -r .$2
+    def_envs_tool $1 | jq .[$2].$3 | perl -pe '{s|^"\|"$||g}' | grep -v "null"
 }
 
-def_undecode(){
-    for i in $@; do
-        echo $i | awk 'BEGIN{for(i=0;i<10;i++)hex[i]=i;hex["A"]=hex["a"]=10;hex["B"]=hex["b"]=11;hex["C"]=hex["c"]=12;hex["D"]=hex["d"]=13;hex["E"]=hex["e"]=14;hex["F"]=hex["f"]=15;}{gsub(/\+/," ");i=$0;while(match(i,/%../)){;if(RSTART>1);printf"%s",substr(i,1,RSTART-1);printf"%c",hex[substr(i,RSTART+1,1)]*16+hex[substr(i,RSTART+2,1)];i=substr(i,RSTART+RLENGTH);}print i;}'
-    done
+def_json_match(){
+    if [[ -f $1 ]]; then
+        if [[ $3 && $(cat "$1" | grep "$3") ]]; then
+            cat "$1" | perl -pe '{s|^\[\|\]$||g; s|\n||g; s|\},$|\}\n|g}' | grep "$2" | jq -r .$3 | grep -v "null"
+        else
+            cat "$1" | perl -pe '{s|^\[\|\]$||g; s|\n||g; s|\},$|\}\n|g}' | grep "$2" | grep -v "null"
+        fi
+    fi
 }
 
-def_ck_sub(){
-    if [[ $@ ]]; then
-        local i j k
-        for ((j = 1; j <= 3; j++)); do eval tmp_$j=""; done  
-        for i in $@; do
-            for j in $(def_undecode $(def_json JD_COOKIE value) | awk '/'$i'/{print NR}'); do
-                k=$((j - 1));
-                echo $k
-            done
-        done
+def_json_value(){
+    if [[ -f $1 ]]; then
+        if [[ $(cat "$1" | grep "$2") ]]; then
+            cat "$1" | perl -pe "{s|^\[\|\]$||g; s|\n||g; s|\},$|\}\n|g}" | grep "$3" | jq -r .$2 | grep -v "null"
+        fi
     fi
 }
 
@@ -168,6 +179,43 @@ def_sub(){
         j=$((i - 1));
         echo $j
     done
+}
+
+def_sub_value(){
+    local line=$(($3 + 1))
+    def_json_total $1 $2 | awk 'NR=='$line''
+}
+
+def_urldecode(){
+    local i
+    for i in $@; do
+        echo $i | awk 'BEGIN{for(i=0;i<10;i++)hex[i]=i;hex["A"]=hex["a"]=10;hex["B"]=hex["b"]=11;hex["C"]=hex["c"]=12;hex["D"]=hex["d"]=13;hex["E"]=hex["e"]=14;hex["F"]=hex["f"]=15;}{gsub(/\+/," ");i=$0;while(match(i,/%../)){;if(RSTART>1);printf"%s",substr(i,1,RSTART-1);printf"%c",hex[substr(i,RSTART+1,1)]*16+hex[substr(i,RSTART+2,1)];i=substr(i,RSTART+RLENGTH);}print i;}'
+    done
+}
+
+def_pin_sub(){
+    if [[ $@ ]]; then
+        local i j k
+        for i in $@; do
+            for j in $(def_urldecode $(def_json_total JD_COOKIE value | perl -pe "{s|.*pt_pin=([^; ]+)(?=;?).*|\1|}") | awk '/'$i'/{print NR}'); do
+                k=$((j - 1));
+                echo $k
+            done
+        done
+    fi
+}
+
+# 字符串 def_urldecode 解密
+def_urldecode(){
+    for i in $@; do
+        echo $i | awk 'BEGIN{for(i=0;i<10;i++)hex[i]=i;hex["A"]=hex["a"]=10;hex["B"]=hex["b"]=11;hex["C"]=hex["c"]=12;hex["D"]=hex["d"]=13;hex["E"]=hex["e"]=14;hex["F"]=hex["f"]=15;}{gsub(/\+/," ");i=$0;while(match(i,/%../)){;if(RSTART>1);printf"%s",substr(i,1,RSTART-1);printf"%c",hex[substr(i,RSTART+1,1)]*16+hex[substr(i,RSTART+2,1)];i=substr(i,RSTART+RLENGTH);}print i;}'
+    done
+}
+
+# 字符串 urldecode 解密
+urldecode() {
+    local url_encoded="${1//+/ }"
+    printf '%b' "${url_encoded//%/\\x}"
 }
 
 ## 生成pt_pin清单
@@ -180,11 +228,14 @@ gen_pt_pin_array() {
     }
 
     gen_basic_value value status
+    # 生成JD_COOKIE下标数组
     ori_sub=(${!value[@]})
-    ori_sn=($(def_json JD_COOKIE value | awk '{print NR}'))
+    # 生成序号数组
+    sn=($(def_json_total JD_COOKIE value | awk '{print NR}'))
+    # 生成pin值数组
     pin=($(def_json_total JD_COOKIE value | perl -pe "{s|.*pt_pin=([^; ]+)(?=;?).*|\1|}"))
-    pt_pin=($(def_json_total JD_COOKIE value | perl -pe "{s|.*pt_pin=([^; ]+)(?=;?).*|\1|}" | awk 'BEGIN{for(i=0;i<10;i++)hex[i]=i;hex["A"]=hex["a"]=10;hex["B"]=hex["b"]=11;hex["C"]=hex["c"]=12;hex["D"]=hex["d"]=13;hex["E"]=hex["e"]=14;hex["F"]=hex["f"]=15;}{gsub(/\+/," ");i=$0;while(match(i,/%../)){;if(RSTART>1);printf"%s",substr(i,1,RSTART-1);printf"%c",hex[substr(i,RSTART+1,1)]*16+hex[substr(i,RSTART+2,1)];i=substr(i,RSTART+RLENGTH);}print i;}'))
-
+    # 生成非转码pin值数组
+    pt_pin=($(urldecode "${pin[*]}"))
     #面板 JD_COOKIE 数组
     ori_array=(${value[@]})
     #面板 JD_COOKIE 总数
@@ -264,7 +315,7 @@ gen_uesr_info(){
         NickName[$1]=""
     fi
     [[ ! ${NickName[$1]} || ${NickName[$1]} = null ]] && UserName[$1]=${pin[$1]} || UserName[$1]=${NickName[$1]}
-    ori_full_name[$1]="【${ori_sn[$1]}】${UserName[$1]}${remarks_name[$1]}"
+    ori_full_name[$1]="【${sn[$1]}】${UserName[$1]}${remarks_name[$1]}"
     full_name[$1]="${ori_full_name[$1]}"
     [[ $status[$1] = 1 ]] && unset ori_array[$1]
 }
@@ -283,9 +334,9 @@ TempBlock_CK(){
         ## 导入基础 JD_COOKIE 变量
         local TempBlockCookie TempBlockPin TempDesiPin i j m n p q
         if [[ $3 ]]; then
-            TempDesiPin="$(def_undecode $3 | perl -pe "{s|,| |g;}")"
+            TempDesiPin="$(def_urldecode $3 | perl -pe "{s|,| |g;}")"
             i=0
-            for j in $(def_ck_sub $TempDesiPin); do
+            for j in $(def_pin_sub $TempDesiPin); do
                 [[ ${status[j]} = 1 ]] && continue
                 TempDesiCKArray[i]=${ori_array[j]}
                 let i++
@@ -293,12 +344,12 @@ TempBlock_CK(){
             [[ ${TempDesiCKArray[@]} ]] && ori_array=(${TempDesiCKArray[@]})
         else
             [[ $(echo $1 | perl -pe "{s|\D||g;}") ]] && TempBlockCookie="$(eval echo $(echo $1 | perl -pe "{s|~\|-|_|g; s|\W+\|[A-Za-z]+| |g; s|(\d+)_(\d+)|{\1..\2}|g;}"))" || TempBlockCookie=""
-            TempBlockPin="$(def_undecode $2 | perl -pe "{s|,| |g;}")"
+            TempBlockPin="$(def_urldecode $2 | perl -pe "{s|,| |g;}")"
             for m in $TempBlockCookie; do
                 n=$((m - 1))
                 unset ori_array[n]
             done
-            for k in $(def_ck_sub $TempBlockPin); do
+            for k in $(def_pin_sub $TempBlockPin); do
                 unset ori_array[k]
             done
         fi
@@ -760,9 +811,9 @@ Recombin_CK_cal(){
     combine_bottom(){
         local array_bottom i
         if [[ $Bottom_CK && ! $jdCookie_bottom ]]; then
-            bottom_ck="$(def_undecode $Bottom_CK | perl -pe "{s|,| |g;}")"
+            bottom_ck="$(def_urldecode $Bottom_CK | perl -pe "{s|,| |g;}")"
             i=0
-            for j in $(def_ck_sub $bottom_ck); do
+            for j in $(def_pin_sub $bottom_ck); do
                 [[ ! ${ori_array[j]} ]] && continue
                 array_bottom[i]=${ori_array[j]}
                 unset ori_array[j]
@@ -892,13 +943,14 @@ JS_Deps_Replace() {
 
 [[ -f $dir_config/jdCookie.js && $local_scr_dir ]] && cp -rf $dir_config/jdCookie.js $local_scr_dir/jdCookie.js
 [[ -f $dir_scripts/CK_WxPusherUid.json && $local_scr_dir && $local_scr_dir != $dir_scripts ]] && cp -rf $dir_scripts/CK_WxPusherUid.json $local_scr_dir/CK_WxPusherUid.json 
-#source $file_env
+source $file_env
 gen_pt_pin_array
 JS_Deps_Replace
 TempBlock_CK
 remove_void_ck
 Recombin_CK
 combine_only
+[[ $local_scr == *jx_cfd_dh* ]] && sed -i "s/CFD_COOKIE/JD_COOKIE/g" $local_scr_dir/$local_scr_name
 
 #if [[ $(ls $dir_code) ]]; then
 #    latest_log=$(ls -r $dir_code | head -1)
