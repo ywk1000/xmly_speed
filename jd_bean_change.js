@@ -560,22 +560,21 @@ if(DisableIndex!=-1){
 			await $.wait(1000);
 			
 			await Promise.all([
-		         getJoyBaseInfo(), //汪汪乐园
-		         getJdZZ(), //京东赚赚
-		         getMs(), //京东秒杀
-		         cash(), //极速金币
-		         jdJxMCinfo(), //京喜牧场
-		         bean(), //京豆查询
-		         getJxFactory(), //京喜工厂
-		         getDdFactoryInfo(), // 京东工厂
-		         jdCash(), //领现金
-		         GetJxBeaninfo(), //喜豆查询
-		         GetPigPetInfo(), //金融养猪
-				 GetJoyRuninginfo(), //汪汪赛跑 
-				 CheckEcard(), //E卡查询
-				 queryScores()
-		     ])
-			
+			        getJoyBaseInfo(), //汪汪乐园
+			        getJdZZ(), //京东赚赚
+			        getMs(), //京东秒杀			        
+			        cash(), //极速金币
+			        jdJxMCinfo(), //京喜牧场
+			        bean(), //京豆查询
+			        getJxFactory(), //京喜工厂
+			        getDdFactoryInfo(), // 京东工厂
+			        jdCash(), //领现金
+			        GetJxBeaninfo(), //喜豆查询
+			        GetPigPetInfo(), //金融养猪
+			        GetJoyRuninginfo(), //汪汪赛跑
+			        queryScores()
+			    ])
+				
 			await showMsg();
 			if (intPerSent > 0) {
 				if ((i + 1) % intPerSent == 0) {
