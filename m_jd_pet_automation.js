@@ -39,7 +39,7 @@ $.logic = async function () {
 };
 
 $.run({
-    wait: [2000, 3000], whitelist: ['1-150']
+    wait: [2000, 3000], whitelist: ['1-1000']
 }).catch(
     reason => $.log(reason));
 
