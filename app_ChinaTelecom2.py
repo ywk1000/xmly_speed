@@ -7,7 +7,7 @@
 # const $ = new Env(&apos;电信签到&apos;);
 # -------------------------------
 
-&quot;&quot;&quot;
+"""
 1. 电信签到 不需要抓包 脚本仅供学习交流使用, 请在下载后24h内删除
 2. cron说明 12点必须执行一次(用于兑换) 然后12点之外还需要执行一次(用于执行每日任务) 一天共两次 可直接使用默认cron
 2. 环境变量说明:
@@ -16,12 +16,12 @@
     并发命令：task WWJqingcheng_dx/china_telecom2.py conc TELECOM
     task 后边是脚本所在目录/china_telecom2.py conc TELECOM
 3. 必须登录过 电信营业厅 app的账号才能正常运行
-&quot;&quot;&quot;
-&quot;&quot;&quot;
+"""
+"""
 update:
     2022.10.25 参考大佬 github@QGCliveDavis https://github.com/QGCliveDavis 的 loginAuthCipherAsymmertric 参数解密 新增app登录获取token 完成星播客系列任务 感谢大佬
     2022.11.11 增加分享任务
-&quot;&quot;&quot;
+"""
 from datetime import date, datetime
 from random import shuffle, randint, choices
 from time import sleep, strftime
