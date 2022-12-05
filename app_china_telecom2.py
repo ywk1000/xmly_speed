@@ -12,7 +12,7 @@
 2. cron说明 12点必须执行一次(用于兑换) 然后12点之外还需要执行一次(用于执行每日任务) 一天共两次 可直接使用默认cron
 2. 环境变量说明:
     必须  TELECOM_LOTTERY : 电信手机号@电信服务密码@宠物喂食次数(默认0,最大10)&手机号2@密码2@喂食数2
-    # TELECOM       13311111111@111111@0&13322222222@222222@10
+    # export TELECOM="13311111111@111111@0&13322222222@222222@10"
     并发命令：task WWJqingcheng_dx/china_telecom2.py conc TELECOM
     task 后边是脚本所在目录/china_telecom2.py conc TELECOM
 3. 必须登录过 电信营业厅 app的账号才能正常运行
