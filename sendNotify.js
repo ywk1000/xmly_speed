@@ -21,7 +21,7 @@ const querystring = require('querystring');
 const exec = require('child_process').exec;
 const $ = new Env();
 const timeout = 15000; //超时时间(单位毫秒)
-console.log("加载sendNotify，当前版本: 20220723");
+console.log("加载sendNotify，当前版本: 20221118");
 // =======================================go-cqhttp通知设置区域===========================================
 //gobot_url 填写请求地址http://127.0.0.1/send_private_msg
 //gobot_token 填写在go-cqhttp文件设置的访问密钥
@@ -305,10 +305,23 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                                 var MessageUserGp2 = "";
                                 var MessageUserGp3 = "";
                                 var MessageUserGp4 = "";
+								var MessageUserGp5 = "";
+                                var MessageUserGp6 = "";
+                                var MessageUserGp7 = "";
+								var MessageUserGp8 = "";
+                                var MessageUserGp9 = "";
+                                var MessageUserGp10 = "";
 
                                 var userIndex2 = -1;
                                 var userIndex3 = -1;
                                 var userIndex4 = -1;
+								var userIndex5 = -1;
+                                var userIndex6 = -1;
+                                var userIndex7 = -1;
+								var userIndex8 = -1;
+                                var userIndex9 = -1;
+                                var userIndex10 = -1;
+								
 
                                 var strNotifyOneTemp = "";
                                 if ($.isNode() && process.env.BEANCHANGE_USERGP2) {
@@ -322,10 +335,33 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                                 if ($.isNode() && process.env.BEANCHANGE_USERGP4) {
                                     MessageUserGp4 = process.env.BEANCHANGE_USERGP4 ? process.env.BEANCHANGE_USERGP4.split('&') : [];
                                 }
+								
+								if ($.isNode() && process.env.BEANCHANGE_USERGP5) {
+                                    MessageUserGP5 = process.env.BEANCHANGE_USERGP5 ? process.env.BEANCHANGE_USERGP5.split('&') : [];
+                                }
+
+                                if ($.isNode() && process.env.BEANCHANGE_USERGP6) {
+                                    MessageUserGP6 = process.env.BEANCHANGE_USERGP6 ? process.env.BEANCHANGE_USERGP6.split('&') : [];
+                                }
+
+                                if ($.isNode() && process.env.BEANCHANGE_USERGP7) {
+                                    MessageUserGP7 = process.env.BEANCHANGE_USERGP7 ? process.env.BEANCHANGE_USERGP7.split('&') : [];
+                                }
+
+								if ($.isNode() && process.env.BEANCHANGE_USERGP8) {
+                                    MessageUserGP8 = process.env.BEANCHANGE_USERGP8 ? process.env.BEANCHANGE_USERGP8.split('&') : [];
+                                }
+
+                                if ($.isNode() && process.env.BEANCHANGE_USERGP9) {
+                                    MessageUserGP9 = process.env.BEANCHANGE_USERGP9 ? process.env.BEANCHANGE_USERGP9.split('&') : [];
+                                }
+
+                                if ($.isNode() && process.env.BEANCHANGE_USERGP10) {
+                                    MessageUserGP10 = process.env.BEANCHANGE_USERGP10 ? process.env.BEANCHANGE_USERGP10.split('&') : [];
+                                }
 
                                 if (MessageUserGp4) {
                                     userIndex4 = MessageUserGp4.findIndex((item) => item === strPtPin);
-
                                 }
                                 if (MessageUserGp2) {
                                     userIndex2 = MessageUserGp2.findIndex((item) => item === strPtPin);
@@ -333,6 +369,25 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                                 if (MessageUserGp3) {
                                     userIndex3 = MessageUserGp3.findIndex((item) => item === strPtPin);
                                 }
+                                if (MessageUserGP5) {
+                                    userIndex5 = MessageUserGP5.findIndex((item) => item === strPtPin);
+                                }
+                                if (MessageUserGp6) {
+                                    userIndex6 = MessageUserGp6.findIndex((item) => item === strPtPin);
+                                }
+                                if (MessageUserGp7) {
+                                    userIndex7 = MessageUserGp7.findIndex((item) => item === strPtPin);
+                                }
+                                if (MessageUserGp8) {
+                                    userIndex8 = MessageUserGp8.findIndex((item) => item === strPtPin);
+                                }
+                                if (MessageUserGp9) {
+                                    userIndex9 = MessageUserGp9.findIndex((item) => item === strPtPin);
+                                }
+                                if (MessageUserGp10) {
+                                    userIndex10 = MessageUserGp10.findIndex((item) => item === strPtPin);
+                                }
+
 
                                 if (userIndex2 != -1) {
                                     console.log(`该账号属于分组2`);
@@ -346,7 +401,32 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                                     console.log(`该账号属于分组4`);
                                     text = "京东CK检测#4";
                                 }
-                                if (userIndex4 == -1 && userIndex2 == -1 && userIndex3 == -1) {
+								if (userIndex5 != -1) {
+                                    console.log(`该账号属于分组5`);
+                                    text = "京东CK检测#5";
+                                }
+                                if (userIndex6 != -1) {
+                                    console.log(`该账号属于分组6`);
+                                    text = "京东CK检测#6";
+                                }
+                                if (userIndex7 != -1) {
+                                    console.log(`该账号属于分组7`);
+                                    text = "京东CK检测#7";
+                                }
+								if (userIndex8 != -1) {
+                                    console.log(`该账号属于分组8`);
+                                    text = "京东CK检测#8";
+                                }
+                                if (userIndex9 != -1) {
+                                    console.log(`该账号属于分组9`);
+                                    text = "京东CK检测#9";
+                                }
+                                if (userIndex10 != -1) {
+                                    console.log(`该账号属于分组10`);
+                                    text = "京东CK检测#10";
+                                }
+								
+                                if (userIndex4 == -1 && userIndex2 == -1 && userIndex3 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1 && userIndex8 == -1 && userIndex9 == -1 && userIndex10 == -1) {
                                     text = "京东CK检测";
                                 }
                                 if (process.env.CHECKCK_ALLNOTIFY) {
@@ -902,7 +982,7 @@ function getuuid(strRemark, PtPin) {
         if (Tempindex != -1) {
             console.log(PtPin + ": 检测到NVJDC的一对一格式,瑞思拜~!");
             var TempRemarkList = strRemark.split("@@");
-            for (let j = 1; j < TempRemarkList.length; j++) {
+            for (let j = 0; j < TempRemarkList.length; j++) {
                 if (TempRemarkList[j]) {
                     if (TempRemarkList[j].length > 4) {
                         if (TempRemarkList[j].substring(0, 4) == "UID_") {
@@ -1968,7 +2048,7 @@ function GetnickName() {
                 Accept: "*/*",
                 Connection: "keep-alive",
                 Cookie: cookie,
-                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36 Edg/106.0.1370.42",
                 "Accept-Language": "zh-cn",
                 "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
                 "Accept-Encoding": "gzip, deflate, br"
@@ -2005,16 +2085,17 @@ function GetnickName() {
 function GetnickName2() {
     return new Promise(async(resolve) => {
         const options = {
-            url: `https://wxapp.m.jd.com/kwxhome/myJd/home.json?&useGuideModule=0&bizId=&brandId=&fromType=wxapp&timestamp=${Date.now()}`,
-            headers: {
-                Cookie: cookie,
-                'content-type': `application/x-www-form-urlencoded`,
-                Connection: `keep-alive`,
-                'Accept-Encoding': `gzip,compress,br,deflate`,
-                Referer: `https://servicewechat.com/wxa5bf5ee667d91626/161/page-frame.html`,
-                Host: `wxapp.m.jd.com`,
-                'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.10(0x18000a2a) NetType/WIFI Language/zh_CN`,
-            },
+            "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,
+            "headers": {
+                "Accept": "application/json,text/plain, */*",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Accept-Language": "zh-cn",
+                "Connection": "keep-alive",
+                "Cookie": cookie,
+                "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
+                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
+            }
         };
         $.post(options, (err, resp, data) => {
             try {
@@ -2023,13 +2104,12 @@ function GetnickName2() {
                 } else {
                     if (data) {
                         data = JSON.parse(data);
-                        if (!data.user) {
+						if (data['retcode'] === 13) {
                             $.isLogin = false; //cookie过期
-                            return;
-                        }
-                        const userInfo = data.user;
-                        if (userInfo) {
-                            $.nickName = userInfo.petName;
+                            return
+                        }                        
+						if (data['retcode'] === 0) {
+                            $.nickName = (data['base'] && data['base'].nickname) || "";
                         }
                     } else {
                         $.log('京东服务器返回空数据');
