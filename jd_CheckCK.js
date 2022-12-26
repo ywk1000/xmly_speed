@@ -33,6 +33,8 @@ let MessageUserGp5 = "";
 let MessageUserGp6 = "";
 let MessageUserGp7 = "";
 let MessageUserGp8 = "";
+let MessageUserGp9 = "";
+let MessageUserGp10 = "";
 
 let MessageGp2 = "";
 let MessageGp3 = "";
@@ -41,6 +43,8 @@ let MessageGp5 = "";
 let MessageGp6 = "";
 let MessageGp7 = "";
 let MessageGp8 = "";
+let MessageGp9 = "";
+let MessageGp10 = "";
 let MessageAll = "";
 
 let userIndex2 = -1;
@@ -50,6 +54,8 @@ let userIndex5 = -1;
 let userIndex6 = -1;
 let userIndex7 = -1;
 let userIndex8 = -1;
+let userIndex9 = -1;
+let userIndex10 = -1;
 
 let IndexGp2 = 0;
 let IndexGp3 = 0;
@@ -58,6 +64,8 @@ let IndexGp5 = 0;
 let IndexGp6 = 0;
 let IndexGp7 = 0;
 let IndexGp8 = 0;
+let IndexGp9 = 0;
+let IndexGp10 = 0;
 let IndexAll = 0;
 
 let TempErrorMessage = '',
@@ -122,6 +130,20 @@ DisableMessageGp8 = '',
 EnableMessageGp8 = '',
 OErrorMessageGp8 = '';
 
+let allMessageGp9 = '',
+ErrorMessageGp9 = '',
+SuccessMessageGp9 = '',
+DisableMessageGp9 = '',
+EnableMessageGp9 = '',
+OErrorMessageGp9 = '';
+
+let allMessageGp10 = '',
+ErrorMessageGp10 = '',
+SuccessMessageGp10 = '',
+DisableMessageGp10 = '',
+EnableMessageGp10 = '',
+OErrorMessageGp10 = '';
+
 let strAllNotify = "";
 let strNotifyOneTemp = "";
 let WP_APP_TOKEN_ONE = "";
@@ -156,14 +178,24 @@ if ($.isNode() && process.env.BEANCHANGE_USERGP6) {
     console.log(`检测到设定了分组推送6`);
 }
 
-if ($.isNode() && process.env.BEANCHANGE_USERGp7) {
-    MessageUserGp7 = process.env.BEANCHANGE_USERGp7 ? process.env.BEANCHANGE_USERGp7.split('&') : [];
+if ($.isNode() && process.env.BEANCHANGE_USERGP7) {
+    MessageUserGp7 = process.env.BEANCHANGE_USERGP7 ? process.env.BEANCHANGE_USERGP7.split('&') : [];
     console.log(`检测到设定了分组推送7`);
 }
 
-if ($.isNode() && process.env.BEANCHANGE_USERGp8) {
-    MessageUserGp8 = process.env.BEANCHANGE_USERGp8 ? process.env.BEANCHANGE_USERGp8.split('&') : [];
+if ($.isNode() && process.env.BEANCHANGE_USERGP8) {
+    MessageUserGp8 = process.env.BEANCHANGE_USERGP8 ? process.env.BEANCHANGE_USERGP8.split('&') : [];
     console.log(`检测到设定了分组推送8`);
+}
+
+if ($.isNode() && process.env.BEANCHANGE_USERGP9) {
+    MessageUserGp9 = process.env.BEANCHANGE_USERGP9 ? process.env.BEANCHANGE_USERGP9.split('&') : [];
+    console.log(`检测到设定了分组推送9`);
+}
+
+if ($.isNode() && process.env.BEANCHANGE_USERGP10) {
+    MessageUserGp10 = process.env.BEANCHANGE_USERGP10 ? process.env.BEANCHANGE_USERGP10.split('&') : [];
+    console.log(`检测到设定了分组推送10`);
 }
 
 if ($.isNode() && process.env.CHECKCK_SHOWSUCCESSCK) {
@@ -236,21 +268,6 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
 
                 userIndex3 = MessageUserGp3.findIndex((item) => item === $.UserName);
             }
-            if (MessageUserGp5) {
-                userIndex5 = MessageUserGp5.findIndex((item) => item === $.UserName);
-            }
-            if (MessageUserGp6) {
-
-                userIndex6 = MessageUserGp6.findIndex((item) => item === $.UserName);
-            }
-            if (MessageUserGp7) {
-
-                userIndex7 = MessageUserGp7.findIndex((item) => item === $.UserName);
-            }
-            if (MessageUserGp8) {
-
-                userIndex8 = MessageUserGp8.findIndex((item) => item === $.UserName);
-            }
 
             if (userIndex2 != -1) {
                 console.log(`账号属于分组2`);
@@ -287,7 +304,17 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 IndexGp8 += 1;
                 ReturnMessageTitle = `【账号${IndexGp8}🆔】${$.UserName2}`;
             }
-            if (userIndex4 == -1 && userIndex2 == -1 && userIndex3 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1 && userIndex8 == -1) {
+            if (userIndex9 != -1) {
+                console.log(`账号属于分组9`);
+                IndexGp9 += 1;
+                ReturnMessageTitle = `【账号${IndexGp9}🆔】${$.UserName2}`;
+            }
+            if (userIndex10 != -1) {
+                console.log(`账号属于分组10`);
+                IndexGp10 += 1;
+                ReturnMessageTitle = `【账号${IndexGp10}🆔】${$.UserName2}`;
+            }
+            if (userIndex4 == -1 && userIndex2 == -1 && userIndex3 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1 && userIndex8 == -1 && userIndex9 == -1 && userIndex10 == -1) {
                 console.log(`账号没有分组`);
                 IndexAll += 1;
                 ReturnMessageTitle = `【账号${IndexAll}🆔】${$.UserName2}`;
@@ -429,7 +456,22 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 EnableMessageGp8 += TempEnableMessage;
                 OErrorMessageGp8 += TempOErrorMessage;
             }
-            if (userIndex4 == -1 && userIndex2 == -1 && userIndex3 == -1 && userIndex7 == -1 && userIndex6 == -1 && userIndex5 == -1 && userIndex8 == -1) {
+            if (userIndex9 != -1) {
+                ErrorMessageGp9 += TempErrorMessage;
+                SuccessMessageGp9 += TempSuccessMessage;
+                DisableMessageGp9 += TempDisableMessage;
+                EnableMessageGp9 += TempEnableMessage;
+                OErrorMessageGp9 += TempOErrorMessage;
+            }
+            if (userIndex10 != -1) {
+                ErrorMessageGp10 += TempErrorMessage;
+                SuccessMessageGp10 += TempSuccessMessage;
+                DisableMessageGp10 += TempDisableMessage;
+                EnableMessageGp10 += TempEnableMessage;
+                OErrorMessageGp10 += TempOErrorMessage;
+            }
+			
+            if (userIndex4 == -1 && userIndex2 == -1 && userIndex3 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1 && userIndex8 == -1 && userIndex9 == -1 && userIndex10 == -1) {
                 ErrorMessage += TempErrorMessage;
                 SuccessMessage += TempSuccessMessage;
                 DisableMessage += TempDisableMessage;
@@ -524,7 +566,6 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 })
             }
         }
-		
         if (MessageUserGp4) {
             if (OErrorMessageGp4) {
                 allMessageGp4 += `👇👇👇👇👇检测出错账号👇👇👇👇👇\n` + OErrorMessageGp4 + `\n\n`;
@@ -565,7 +606,6 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 })
             }
         }
-
         if (MessageUserGp5) {
             if (OErrorMessageGp5) {
                 allMessageGp5 += `👇👇👇👇👇检测出错账号👇👇👇👇👇\n` + OErrorMessageGp5 + `\n\n`;
@@ -598,6 +638,7 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
             if ($.isNode() && (EnableMessageGp5 || DisableMessageGp5 || OErrorMessageGp5 || CKAlwaysNotify == "true")) {
                 console.log("京东CK检测#5：");
                 console.log(allMessageGp5);
+
                 if (strAllNotify)
                     allMessageGp5 += `\n` + strAllNotify;
 
@@ -606,7 +647,6 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 })
             }
         }
-
         if (MessageUserGp6) {
             if (OErrorMessageGp6) {
                 allMessageGp6 += `👇👇👇👇👇检测出错账号👇👇👇👇👇\n` + OErrorMessageGp6 + `\n\n`;
@@ -647,7 +687,6 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 })
             }
         }
-        
         if (MessageUserGp7) {
             if (OErrorMessageGp7) {
                 allMessageGp7 += `👇👇👇👇👇检测出错账号👇👇👇👇👇\n` + OErrorMessageGp7 + `\n\n`;
@@ -688,7 +727,6 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 })
             }
         }
-		
         if (MessageUserGp8) {
             if (OErrorMessageGp8) {
                 allMessageGp8 += `👇👇👇👇👇检测出错账号👇👇👇👇👇\n` + OErrorMessageGp8 + `\n\n`;
@@ -721,6 +759,7 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
             if ($.isNode() && (EnableMessageGp8 || DisableMessageGp8 || OErrorMessageGp8 || CKAlwaysNotify == "true")) {
                 console.log("京东CK检测#8：");
                 console.log(allMessageGp8);
+
                 if (strAllNotify)
                     allMessageGp8 += `\n` + strAllNotify;
 
@@ -729,7 +768,88 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 })
             }
         }
-		
+        if (MessageUserGp9) {
+            if (OErrorMessageGp9) {
+                allMessageGp9 += `👇👇👇👇👇检测出错账号👇👇👇👇👇\n` + OErrorMessageGp9 + `\n\n`;
+            }
+            if (DisableMessageGp9) {
+                allMessageGp9 += `👇👇👇👇👇自动禁用账号👇👇👇👇👇\n` + DisableMessageGp9 + `\n\n`;
+            }
+            if (EnableMessageGp9) {
+                if (CKAutoEnable == "true") {
+                    allMessageGp9 += `👇👇👇👇👇自动启用账号👇👇👇👇👇\n` + EnableMessageGp9 + `\n\n`;
+                } else {
+                    allMessageGp9 += `👇👇👇👇👇账号已恢复👇👇👇👇👇\n` + EnableMessageGp9 + `\n\n`;
+                }
+            }
+
+            if (ErrorMessageGp9) {
+                allMessageGp9 += `👇👇👇👇👇失效账号👇👇👇👇👇\n` + ErrorMessageGp9 + `\n\n`;
+            } else {
+                allMessageGp9 += `👇👇👇👇👇失效账号👇👇👇👇👇\n 一个失效的都没有呢，羡慕啊...\n\n`;
+            }
+
+            if (ShowSuccess == "true" && SuccessMessage) {
+                allMessageGp9 += `👇👇👇👇👇有效账号👇👇👇👇👇\n` + SuccessMessageGp9 + `\n`;
+            }
+
+            if (NoWarnError == "true") {
+                OErrorMessageGp9 = "";
+            }
+
+            if ($.isNode() && (EnableMessageGp9 || DisableMessageGp9 || OErrorMessageGp9 || CKAlwaysNotify == "true")) {
+                console.log("京东CK检测#9：");
+                console.log(allMessageGp9);
+                if (strAllNotify)
+                    allMessageGp9 += `\n` + strAllNotify;
+
+                await notify.sendNotify("京东CK检测#9", `${allMessageGp9}`, {
+                    url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+                })
+            }
+        }
+        if (MessageUserGp10) {
+            if (OErrorMessageGp10) {
+                allMessageGp10 += `👇👇👇👇👇检测出错账号👇👇👇👇👇\n` + OErrorMessageGp10 + `\n\n`;
+            }
+            if (DisableMessageGp10) {
+                allMessageGp10 += `👇👇👇👇👇自动禁用账号👇👇👇👇👇\n` + DisableMessageGp10 + `\n\n`;
+            }
+            if (EnableMessageGp10) {
+                if (CKAutoEnable == "true") {
+                    allMessageGp10 += `👇👇👇👇👇自动启用账号👇👇👇👇👇\n` + EnableMessageGp10 + `\n\n`;
+                } else {
+                    allMessageGp10 += `👇👇👇👇👇账号已恢复👇👇👇👇👇\n` + EnableMessageGp10 + `\n\n`;
+                }
+            }
+
+            if (ErrorMessageGp10) {
+                allMessageGp10 += `👇👇👇👇👇失效账号👇👇👇👇👇\n` + ErrorMessageGp10 + `\n\n`;
+            } else {
+                allMessageGp10 += `👇👇👇👇👇失效账号👇👇👇👇👇\n 一个失效的都没有呢，羡慕啊...\n\n`;
+            }
+
+            if (ShowSuccess == "true" && SuccessMessage) {
+                allMessageGp10 += `👇👇👇👇👇有效账号👇👇👇👇👇\n` + SuccessMessageGp10 + `\n`;
+            }
+
+            if (NoWarnError == "true") {
+                OErrorMessageGp10 = "";
+            }
+
+            if ($.isNode() && (EnableMessageGp10 || DisableMessageGp10 || OErrorMessageGp10 || CKAlwaysNotify == "true")) {
+                console.log("京东CK检测#10：");
+                console.log(allMessageGp10);
+                if (strAllNotify)
+                    allMessageGp10 += `\n` + strAllNotify;
+
+                await notify.sendNotify("京东CK检测#10", `${allMessageGp10}`, {
+                    url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+                })
+            }
+        }
+
+
         if (OErrorMessage) {
             allMessage += `👇👇👇👇👇检测出错账号👇👇👇👇👇\n` + OErrorMessage + `\n\n`;
         }
@@ -784,7 +904,7 @@ function TotalBean() {
                 Accept: "*/*",
                 Connection: "keep-alive",
                 Cookie: cookie,
-                "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36 Edg/106.0.1370.42",
                 "Accept-Language": "zh-cn",
                 "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
                 "Accept-Encoding": "gzip, deflate, br"
