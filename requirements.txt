@@ -77,3 +77,5 @@ Werkzeug
 wrapt
 XlsxWriter
 yagmail
+requests
+pycryptodome
