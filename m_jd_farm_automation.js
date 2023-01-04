@@ -69,7 +69,7 @@ async function api(fn, body) {
         "Connection": "keep-alive",
         "Accept": "*/*",
         "Host": "api.m.jd.com",
-        'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 14_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.4(0x1800042c) NetType/4G Language/zh_CN miniProgram`,
+        'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 15_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1; MicroMessenger/8.0.4(0x1800042c) NetType/4G Language/zh_CN miniProgram`,
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-cn"
     }
