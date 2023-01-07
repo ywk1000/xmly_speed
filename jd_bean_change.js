@@ -334,14 +334,14 @@ if(DisableIndex!=-1){
 }
 
 //京喜牧场
-let EnableJxMC=true;
+let EnableJxMC=false;
 DisableIndex= strDisableList.findIndex((item) => item === "京喜牧场");
 if(DisableIndex!=-1){
 	console.log("检测到设定关闭京喜牧场查询");
 	EnableJxMC=false;	
 }
 //京喜工厂
-let EnableJxGC=true;
+let EnableJxGC=false;
 DisableIndex=strDisableList.findIndex((item) => item === "京喜工厂");
 if(DisableIndex!=-1){
 	console.log("检测到设定关闭京喜工厂查询");
@@ -394,7 +394,7 @@ if(DisableIndex!=-1){
 }
 
 //汪汪赛跑
-let EnableJoyRun=true;
+let EnableJoyRun=false;
 DisableIndex=strDisableList.findIndex((item) => item === "汪汪赛跑");
 if(DisableIndex!=-1){
 	console.log("检测到设定关闭汪汪赛跑查询");
@@ -584,7 +584,7 @@ if(DisableIndex!=-1){
 
 						await notify.sendNotify(`${$.name}`, `${allMessage}`, {
 							url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-						}, '\n\n本通知 By ccwav Mod',TempMessage)
+						}, '\n\n本通知 By ywk1000',TempMessage)
 					}
 					if ($.isNode() && allMessageMonth) {
 						await notify.sendNotify(`京东月资产变动`, `${allMessageMonth}`, {
@@ -719,7 +719,7 @@ if(DisableIndex!=-1){
 				
 				await notify.sendNotify(`${$.name}`, `${allMessage}`, {
 					url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-				}, '\n\n本通知 By ccwav Mod',TempMessage)
+				}, '\n\n本通知 By ywk1000 ',TempMessage)
 			}
 			if ($.isNode() && allMessageMonth) {
 				await notify.sendNotify(`京东月资产变动`, `${allMessageMonth}`, {
@@ -735,7 +735,7 @@ if(DisableIndex!=-1){
 				allMessageGp2=strAllNotify+`\n`+allMessageGp2;
 			await notify.sendNotify(`${$.name}#2`, `${allMessageGp2}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-			}, '\n\n本通知 By ccwav Mod',TempMessage)
+			}, '\n\n本通知 By ywk1000 ',TempMessage)
 			await $.wait(10 * 1000);
 		}
 		if ($.isNode() && allMessageGp3) {
@@ -744,7 +744,7 @@ if(DisableIndex!=-1){
 				allMessageGp3=strAllNotify+`\n`+allMessageGp3;
 			await notify.sendNotify(`${$.name}#3`, `${allMessageGp3}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-			}, '\n\n本通知 By ccwav Mod',TempMessage)
+			}, '\n\n本通知 By ywk1000 ',TempMessage)
 			await $.wait(10 * 1000);
 		}
 		if ($.isNode() && allMessageGp4) {
@@ -753,7 +753,7 @@ if(DisableIndex!=-1){
 				allMessageGp4=strAllNotify+`\n`+allMessageGp4;
 			await notify.sendNotify(`${$.name}#4`, `${allMessageGp4}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-			}, '\n\n本通知 By ccwav Mod',TempMessage)
+			}, '\n\n本通知 By ywk1000 ',TempMessage)
 			await $.wait(10 * 1000);
 		}
 		if ($.isNode() && allMessageGp5) {
@@ -762,7 +762,7 @@ if(DisableIndex!=-1){
 				allMessageGp5=strAllNotify+`\n`+allMessageGp5;
 			await notify.sendNotify(`${$.name}#5`, `${allMessageGp5}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-			}, '\n\n本通知 By ccwav Mod',TempMessage)
+			}, '\n\n本通知 By ywk1000 ',TempMessage)
 			await $.wait(10 * 1000);
 		}
 		if ($.isNode() && allMessageGp6) {
@@ -771,7 +771,7 @@ if(DisableIndex!=-1){
 				allMessageGp6=strAllNotify+`\n`+allMessageGp6;
 			await notify.sendNotify(`${$.name}#6`, `${allMessageGp6}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-			}, '\n\n本通知 By ccwav Mod',TempMessage)
+			}, '\n\n本通知 By ywk1000 ',TempMessage)
 			await $.wait(10 * 1000);
 		}
 		if ($.isNode() && allMessageGp7) {
@@ -780,7 +780,7 @@ if(DisableIndex!=-1){
 				allMessageGp7=strAllNotify+`\n`+allMessageGp7;
 			await notify.sendNotify(`${$.name}#7`, `${allMessageGp7}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-			}, '\n\n本通知 By ccwav Mod',TempMessage)
+			}, '\n\n本通知 By ywk1000 ',TempMessage)
 			await $.wait(10 * 1000);
 		}
 		if ($.isNode() && allMessageGp8) {
@@ -789,7 +789,7 @@ if(DisableIndex!=-1){
 				allMessageGp8=strAllNotify+`\n`+allMessageGp8;
 			await notify.sendNotify(`${$.name}#8`, `${allMessageGp8}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-			}, '\n\n本通知 By ccwav Mod',TempMessage)
+			}, '\n\n本通知 By ywk1000 ',TempMessage)
 			await $.wait(10 * 1000);
 		}
 		if ($.isNode() && allMessage) {
@@ -799,7 +799,7 @@ if(DisableIndex!=-1){
 			
 			await notify.sendNotify(`${$.name}`, `${allMessage}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-			}, '\n\n本通知 By ccwav Mod',TempMessage)
+			}, '\n\n本通知 By ywk1000 ',TempMessage)
 			await $.wait(10 * 1000);
 		}
 
