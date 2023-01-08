@@ -1,15 +1,15 @@
-//4 4,16 * * * m_jd_farm_automation.js
-
-console.log('默认种2级，如需调整请设置变量 M_JD_FARM_LEVEL\n使用率不高，指定（desi）账号运行\n')
-const {Env} = require('./function/magic');
-const $ = new Env('农场自动种植兑换');
+//12 3,15 * * * m_jd_farm_automation.js
+//问题反馈:https://t.me/Wall_E_Channel
+const {Env} = require('./magic');
+const $ = new Env('M农场自动化');
 let level = process.env.M_JD_FARM_LEVEL ? process.env.M_JD_FARM_LEVEL * 1 : 2
+$.log('默认种植2级种子，自行配置请配置 M_JD_FARM_LEVEL')
 $.logic = async function () {
     let info = await api('initForFarm',
         {"version": 11, "channel": 3, "babelChannel": 0});
-    if (info.code !== '0') {
-        $.log('可能没开通农场或者黑透了！！！')
-        return
+    $.log(JSON.stringify(info));
+    if (!info?.farmUserPro?.treeState) {
+        $.log('可能没玩农场')
     }
     if (info.farmUserPro.treeState === 1) {
         return
@@ -25,14 +25,13 @@ $.logic = async function () {
         info = await api('initForFarm',
             {"version": 11, "channel": 3, "babelChannel": 0});
     }
-    if (info.farmUserPro.treeState === 3) {
-        let hongBao = info.myHongBaoInfo.hongBao;
-        $.putMsg(`已兑换${hongBao.discount}红包，${$.formatDate(hongBao.endTime)}过期`)
+    if (info.farmUserPro.treeState !== 3) {
+        return
     }
-    
-    let element = info.farmLevelWinGoods[level][0] || 0;
+    let hongBao = info.myHongBaoInfo.hongBao;
+    $.putMsg(`${hongBao.discount}红包，${$.formatDate(hongBao.endTime)}过期`)
+    let element = info.farmLevelWinGoods[level][0];
     await $.wait(1000, 3000)
-    if (element) {
     info = await api('choiceGoodsForFarm', {
         "imageUrl": '',
         "nickName": '',
@@ -44,17 +43,14 @@ $.logic = async function () {
         "babelChannel": 0
     });
     if (info.code * 1 === 0) {
-        $.putMsg(`\n再次种植【${info.farmUserPro.name}】`)
+        $.putMsg(`已种【${info.farmUserPro.name}】`)
     }
-    let a = await api('gotStageAwardForFarm',
+    await api('gotStageAwardForFarm',
         {"type": "4", "version": 11, "channel": 3, "babelChannel": 0});
-    let b = await api('waterGoodForFarm',
+    await api('waterGoodForFarm',
         {"type": "", "version": 11, "channel": 3, "babelChannel": 0});
-    let c = await api('gotStageAwardForFarm',
-        {"type": "1", "version": 11, "channel": 3, "babelChannel": 0}); 
-    }else{
-    $.log('种子已抢完，下次在来!!!\n')
-    } 
+    await api('gotStageAwardForFarm',
+        {"type": "1", "version": 11, "channel": 3, "babelChannel": 0});
 };
 
 $.run({wait: [2000, 3000]}).catch(reason => $.log(reason));
@@ -69,7 +65,7 @@ async function api(fn, body) {
         "Connection": "keep-alive",
         "Accept": "*/*",
         "Host": "api.m.jd.com",
-        'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 15_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1; MicroMessenger/8.0.4(0x1800042c) NetType/4G Language/zh_CN miniProgram`,
+        'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 14_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.4(0x1800042c) NetType/4G Language/zh_CN miniProgram`,
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-cn"
     }
