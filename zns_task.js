@@ -2,7 +2,7 @@
 任务+抽奖
 默认不抽奖
 抽奖变量ZNSLOTTERY='true'
-12 3-23/4 * * * https://raw.githubusercontent.com/6dylan6/jdpro/main/jd_zns_task.js
+12 12 12 12 * https://raw.githubusercontent.com/6dylan6/jdpro/main/jd_zns_task.js
 updatetime:2023/1/3 fix抽奖
 */
 const $ = new Env('炸年兽任务');
