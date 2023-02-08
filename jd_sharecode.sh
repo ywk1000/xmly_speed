@@ -4,7 +4,7 @@
 ## Build 20220325-001-test
 grep '6dylan6_0126' /ql/data/config/task_before.sh >/dev/null 2>&1 || grep '6dylan6_0126' /ql/config/task_before.sh > /dev/null 2>&1
 if [[ $? != 0 ]];then
- cp /ql/repo/shufflewzc_faker3_main/docker/task_before.sh /ql/config/ >/dev/null 2>&1 || cp /ql/data/repo/shufflewzc_faker3_main/docker/task_before.sh /ql/data/config/
+ cp /ql/data/repo/6dylan6_jdpro_main/docker/task_before.sh /ql/config/ >/dev/null 2>&1 || cp /ql/data/repo/6dylan6_jdpro_main/docker/task_before.sh /ql/data/config/
 fi
 
 ## 导入通用变量与函数
