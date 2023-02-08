@@ -11,7 +11,7 @@ fi
 #dir_shell=/ql/shell
 #. $dir_shell/share.sh
 ## 目录
-dir_root=/ql
+dir_root=/ql/data
 dir_config=$dir_root/config
 dir_scripts=$dir_root/scripts
 dir_log=$dir_root/log
@@ -22,12 +22,12 @@ dir_code=$dir_log/6dylan6_jdpro_main_jd_sharecode
 [[ -d $dir_root/config ]] && dir_config=$dir_data/config
 [[ -d $dir_data/scripts ]] && dir_scripts=$dir_data/scripts
 [[ -d $dir_data/log ]] && dir_log=$dir_data/log
-[[ -d `echo /ql/data/log/6dylan6_jdpro_jd_sharecode*|awk '{print $1}'` ]]  && dir_code=`ls -dt /ql/data/log/6dylan6_jdpro_jd_sharecode*|awk '{print $1}'|head -1`
+[[ -d `echo /ql/data/log/6dylan6_jdpro_main_jd_sharecode*|awk '{print $1}'` ]]  && dir_code=`ls -dt /ql/data/log/6dylan6_jdpro_main_jd_sharecode*|awk '{print $1}'|head -1`
 
 ## 预设的仓库及默认调用仓库设置
 ## 将"repo=$repo1"改成repo=$repo2"或其他，以默认调用其他仓库脚本日志
 ## 也可自行搜索本脚本内的"name_js=("和"name_js_only",将"repo"改成"repo2"或其他，用以自由组合调用仓库的脚本日志
-repo1='6dylan6_jdpro'                       #预设的 panghu999 仓库
+repo1='6dylan6_jdpro_main'                       #预设的 panghu999 仓库
 repo=$repo1                                        #空值，表示遍历所有仓库脚本日志
 
 ## 调试模式开关，默认是0，表示关闭；设置为1，表示开启
@@ -53,7 +53,7 @@ CLEANBAK_DAYS="2"
 HelpType=""
 
 ## 定义前 N 个账号优先助力，N 个以后账号间随机助力。front_num="N"，N 定义值小于账号总数，当HelpType 赋值 3 或 4 时有效
-front_num="5"
+front_num="50"
 
 ## 定义指定活动采用指定的互助模板。
 ## 设定值为 DiyHelpType="1" 表示启用功能；不填或填其他内容表示不开启功能。
@@ -135,11 +135,11 @@ var_name=(
 ## 所有有互助码的活动，把脚本名称列在 name_js 中，对应 config.sh 中互助码后缀列在 name_config 中，中文名称列在 name_chinese 中。
 ## name_js、name_config 和 name_chinese 中的三个名称必须一一对应。
 name_js=(
-  "$repo"_jd_fruit
-  "$repo"_jd_pet
-  "$repo"_jd_plantBean
-  "$repo"_jd_dreamFactory
-  "$repo"_jd_jdfactory
+  "$repo"_jd_fruit_2211
+  #"$repo"_jd_pet
+  "$repo"_jd_plantBean_2261
+  #"$repo"_jd_dreamFactory
+  #"$repo"_jd_jdfactory
   #"$repo"_jd_crazy_joy
   #"$repo"_jd_jdzz
   "$repo"_jd_jxnc
@@ -156,10 +156,10 @@ name_js=(
 
 name_config=(
   Fruit
-  Pet
-  Bean
-  DreamFactory
-  JdFactory
+  #Pet
+  #Bean
+  #DreamFactory
+  #JdFactory
   #Joy
   #Jdzz
   Jxnc
@@ -176,10 +176,10 @@ name_config=(
 
 name_chinese=(
   东东农场-任务
-  东东萌宠
+  #东东萌宠
   京东种豆得豆
-  京喜工厂
-  东东工厂
+  #京喜工厂
+  #东东工厂
   #crazyJoy任务
   #京东赚赚
   京喜农场
