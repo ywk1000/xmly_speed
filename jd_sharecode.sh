@@ -4,7 +4,7 @@
 ## Build 20220325-001-test
 grep '6dylan6_0126' /ql/data/config/task_before.sh >/dev/null 2>&1 || grep '6dylan6_0126' /ql/config/task_before.sh > /dev/null 2>&1
 if [[ $? != 0 ]];then
- cp /ql/data/repo/6dylan6_jdpro_main/docker/task_before.sh /ql/config/ >/dev/null 2>&1 || cp /ql/data/repo/6dylan6_jdpro_main/docker/task_before.sh /ql/data/config/
+ cp /ql/repo/6dylan6_jdpro/docker/task_before.sh /ql/config/ >/dev/null 2>&1 || cp /ql/data/repo/6dylan6_jdpro/docker/task_before.sh /ql/data/config/
 fi
 
 ## 导入通用变量与函数
@@ -15,19 +15,19 @@ dir_root=/ql
 dir_config=$dir_root/config
 dir_scripts=$dir_root/scripts
 dir_log=$dir_root/log
-dir_code=$dir_log/shufflewzc_faker3_main_jd_sharecode
+dir_code=$dir_log/6dylan6_jdpro_main_jd_sharecode
 
 [[ $QL_DIR == /ql ]] && dir_root=$QL_DIR
 [[ -d $dir_root/data ]] && dir_data=$dir_root/data
 [[ -d $dir_root/config ]] && dir_config=$dir_data/config
 [[ -d $dir_data/scripts ]] && dir_scripts=$dir_data/scripts
 [[ -d $dir_data/log ]] && dir_log=$dir_data/log
-[[ -d `echo /ql/data/log/shufflewzc_faker3_main_jd_sharecode*|awk '{print $1}'` ]]  && dir_code=`ls -dt /ql/data/log/shufflewzc_faker3_main_jd_sharecode*|awk '{print $1}'|head -1`
+[[ -d `echo /ql/data/log/6dylan6_jdpro_jd_sharecode*|awk '{print $1}'` ]]  && dir_code=`ls -dt /ql/data/log/6dylan6_jdpro_jd_sharecode*|awk '{print $1}'|head -1`
 
 ## 预设的仓库及默认调用仓库设置
 ## 将"repo=$repo1"改成repo=$repo2"或其他，以默认调用其他仓库脚本日志
 ## 也可自行搜索本脚本内的"name_js=("和"name_js_only",将"repo"改成"repo2"或其他，用以自由组合调用仓库的脚本日志
-repo1='shufflewzc_faker3_main'                       #预设的 panghu999 仓库
+repo1='6dylan6_jdpro'                       #预设的 panghu999 仓库
 repo=$repo1                                        #空值，表示遍历所有仓库脚本日志
 
 ## 调试模式开关，默认是0，表示关闭；设置为1，表示开启
