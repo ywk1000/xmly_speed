@@ -1,7 +1,10 @@
+
 /*
 微信阅读
 需要青龙环境
-入口，微信打开 -> https://zl1222211708-1314804847.cos.ap-nanjing.myqcloud.com/index.html?upuid=10729238
+入口，微信打开 -> 推荐阅读 -> https://zs0331001811-1317546905.cos.ap-nanjing.myqcloud.com/index.html?upuid=10959399
+(如无法打开，请复制链接在手机浏览器打开，获取最新入口)
+
 抓包m.*.shop域名下cookie,填入环境变量 yuedu，多账户换行隔开
 
 每天会验证2次左右，碰到验证文章手动打开看一篇即可
