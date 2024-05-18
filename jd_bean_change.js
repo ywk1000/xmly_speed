@@ -506,14 +506,14 @@ if(DisableIndex!=-1){
 	})
 
 	//组1通知
-	if (ReceiveMessageGp4) {
-		allMessage2Gp4 = `【⏰商品白嫖活动领取提醒⏰】\n` + ReceiveMessageGp4;
+	if (ReceiveMessageGp8) {
+		allMessage2Gp8 = `【⏰商品白嫖活动领取提醒⏰】\n` + ReceiveMessageGp8;
 	}
-	if (WarnMessageGp4) {
-		if (allMessage2Gp4) {
-			allMessage2Gp4 = `\n` + allMessage2Gp4;
+	if (WarnMessageGp8) {
+		if (allMessage2Gp8) {
+			allMessage2Gp8 = `\n` + allMessage2Gp8;
 		}
-		allMessage2Gp4 = `【⏰商品白嫖活动任务提醒⏰】\n` + WarnMessageGp4 + allMessage2Gp4;
+		allMessage2Gp8 = `【⏰商品白嫖活动任务提醒⏰】\n` + WarnMessageGp8 + allMessage2Gp8;
 	}
 
 	//组2通知
@@ -581,17 +581,7 @@ if(DisableIndex!=-1){
 		}
 		allMessage2Gp7 = `【⏰商品白嫖活动任务提醒⏰】\n` + WarnMessageGp7 + allMessage2Gp7;
 	}
-	
-	//组8通知
-	if (ReceiveMessageGp8) {
-		allMessage2Gp8 = `【⏰商品白嫖活动领取提醒⏰】\n` + ReceiveMessageGp8;
-	}
-	if (WarnMessageGp8) {
-		if (allMessage2Gp8) {
-			allMessage2Gp8 = `\n` + allMessage2Gp8;
-		}
-		allMessage2Gp8 = `【⏰商品白嫖活动任务提醒⏰】\n` + WarnMessageGp8 + allMessage2Gp8;
-	}
+
 
 	//其他通知
 	if (allReceiveMessage) {
