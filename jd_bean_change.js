@@ -390,15 +390,9 @@ if(DisableIndex!=-1){
 			
 			console.log(`******开始查询【京东账号${$.index}】${$.nickName || $.UserName}*********`);
 			await TotalBean();			
-		    //await TotalBean2();
+		    //await TotalBean2();			
 			if ($.beanCount == 0) {
-				console.log("数据获取失败，等待30秒后重试....")
-				await $.wait(30*1000);
-				await TotalBean();		
-			}
-			if ($.beanCount == 0) {
-				console.log("疑似获取失败,等待10秒后用第二个接口试试....")
-				await $.wait(10*1000);
+				console.log("疑似获取失败,用第二个接口试试....")
 			    var userdata = await getuserinfo();
 			    if (userdata.code == 1) {
 			        $.beanCount = userdata.content.jdBean;
@@ -654,6 +648,42 @@ if(DisableIndex!=-1){
 			if(strAllNotify)
 				allMessageGp4=strAllNotify+`\n`+allMessageGp4;
 			await notify.sendNotify(`${$.name}#4`, `${allMessageGp4}`, {
+				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+			}, '\n\n本通知 By ywk1000',TempMessage)
+			await $.wait(10 * 1000);
+		}
+		if ($.isNode() && allMessageGp5) {
+			var TempMessage=allMessageGp5;
+			if(strAllNotify)
+				allMessageGp5=strAllNotify+`\n`+allMessageGp5;
+			await notify.sendNotify(`${$.name}#5`, `${allMessageGp5}`, {
+				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+			}, '\n\n本通知 By ywk1000',TempMessage)
+			await $.wait(10 * 1000);
+		}
+		if ($.isNode() && allMessageGp6) {
+			var TempMessage=allMessageGp6;
+			if(strAllNotify)
+				allMessageGp6=strAllNotify+`\n`+allMessageGp6;
+			await notify.sendNotify(`${$.name}#6`, `${allMessageGp6}`, {
+				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+			}, '\n\n本通知 By ywk1000',TempMessage)
+			await $.wait(10 * 1000);
+		}
+		if ($.isNode() && allMessageGp7) {
+			var TempMessage=allMessageGp7;
+			if(strAllNotify)
+				allMessageGp7=strAllNotify+`\n`+allMessageGp7;
+			await notify.sendNotify(`${$.name}#7`, `${allMessageGp7}`, {
+				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+			}, '\n\n本通知 By ywk1000',TempMessage)
+			await $.wait(10 * 1000);
+		}
+		if ($.isNode() && allMessageGp8) {
+			var TempMessage=allMessageGp8;
+			if(strAllNotify)
+				allMessageGp8=strAllNotify+`\n`+allMessageGp8;
+			await notify.sendNotify(`${$.name}#8`, `${allMessageGp8}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
 			}, '\n\n本通知 By ywk1000',TempMessage)
 			await $.wait(10 * 1000);
@@ -1374,25 +1404,28 @@ async function CheckEcard(ck) {
     try {
 		var data = 'pageNo=1&queryType=1&cardType=-1&pageSize=20';
         var response = await axios.post(url, data, { headers: headers });
-        var couponVOList = response.data.couponVOList;
-		
-		TotalCard+=couponVOList.length;
-        for (let i = 0; i < couponVOList.length; i++) {
-            balance += couponVOList[i]['balance'];
-        }
-		
-		if (TotalCard==20){
-			data = 'pageNo=2&queryType=1&cardType=-1&pageSize=20';
-			response = await axios.post(url, data, { headers: headers });
-			couponVOList = response.data.couponVOList;
-			TotalCard+=couponVOList.length;
-			for (let i = 0; i < couponVOList.length; i++) {
-				balance += couponVOList[i]['balance'];
-			}
+		if (response.data?.couponVOList) {
+		    var couponVOList = response.data.couponVOList;
+		    TotalCard += couponVOList.length;
+		    for (let i = 0; i < couponVOList.length; i++) {
+		        balance += couponVOList[i]['balance'];
+		    }
+
+		    if (TotalCard == 20) {
+		        data = 'pageNo=2&queryType=1&cardType=-1&pageSize=20';
+		        response = await axios.post(url, data, {
+		            headers: headers
+		        });
+		        couponVOList = response.data.couponVOList;
+		        TotalCard += couponVOList.length;
+		        for (let i = 0; i < couponVOList.length; i++) {
+		            balance += couponVOList[i]['balance'];
+		        }
+		    }
+
+		    if (balance > 0)
+		        $.ECardinfo = '共' + TotalCard + '张E卡,合计' + parseFloat(balance).toFixed(2) + '元';
 		}
-		
-        if (balance > 0) 
-			$.ECardinfo = '共' + TotalCard + '张E卡,合计' + parseFloat(balance).toFixed(2) + '元';
 		
     } catch (e) {
         console.error(e);
@@ -2177,7 +2210,7 @@ async function getuserinfo() {
     return new Promise(resolve => {
         $.post(config, async(err, resp, data) => {
             try {
-                console.log(data)
+                //console.log(data)
                 if (err) {
                     console.log(err)
                 } else {					
