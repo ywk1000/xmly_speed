@@ -804,6 +804,13 @@ if (DisableIndex != -1) {
         })
         await $.wait(10 * 1000);
     }
+    if ($.isNode() && allMessage2Gp8) {
+        allMessage2Gp8 += RemainMessage;
+        await notify.sendNotify("京东白嫖提醒#8", `${allMessage2Gp8}`, {
+            url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
+        })
+        await $.wait(10 * 1000);
+    }
     if ($.isNode() && allMessage2) {
         allMessage2 += RemainMessage;
         await notify.sendNotify("京东白嫖提醒", `${allMessage2}`, {
