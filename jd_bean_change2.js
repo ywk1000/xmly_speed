@@ -1160,16 +1160,28 @@ async function showMsg() {
     }
 
     if (userIndex2 != -1) {
-        allMessageGp2 += ReturnMessageTitle + ReturnMessage + `\n`;
+	allMessageGp2 += ReturnMessageTitle+ReturnMessage + `\n`;
     }
     if (userIndex3 != -1) {
-        allMessageGp3 += ReturnMessageTitle + ReturnMessage + `\n`;
+	allMessageGp3 += ReturnMessageTitle+ReturnMessage + `\n`;
     }
     if (userIndex4 != -1) {
-        allMessageGp4 += ReturnMessageTitle + ReturnMessage + `\n`;
+	allMessageGp4 += ReturnMessageTitle+ReturnMessage + `\n`;
     }
-    if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1) {
-        allMessage += ReturnMessageTitle + ReturnMessage + `\n------\n`;
+    if (userIndex5 != -1) {
+	allMessageGp5 += ReturnMessageTitle+ReturnMessage + `\n`;
+    }
+    if (userIndex6 != -1) {
+	allMessageGp6 += ReturnMessageTitle+ReturnMessage + `\n`;
+    }
+    if (userIndex7 != -1) {
+	allMessageGp7 += ReturnMessageTitle+ReturnMessage + `\n`;
+    }
+    if (userIndex8 != -1) {
+	allMessageGp8 += ReturnMessageTitle+ReturnMessage + `\n`;
+    }
+    if (userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1 && userIndex8 == -1) {
+	allMessage += ReturnMessageTitle+ReturnMessage + `\n`;
     }
 
     console.log(`${ReturnMessageTitle + ReturnMessage}`);
