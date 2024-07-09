@@ -649,7 +649,7 @@ const bdy_0x4d8a20=bdy_0x467d;(function(_0x90c948,_0x9403f5){const bdy_0x3399e2=
             var TempMessage = allMessageGp5;
             if (strAllNotify)
                 allMessageGp5 = strAllNotify + `\n` + allMessageGp5;
-            await notify.sendNotify(`${$.name}#4`, `${allMessageGp5}`, {
+            await notify.sendNotify(`${$.name}#5`, `${allMessageGp5}`, {
                 url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
             }, undefined, TempMessage)
             await $.wait(10 * 1000);
@@ -658,7 +658,7 @@ const bdy_0x4d8a20=bdy_0x467d;(function(_0x90c948,_0x9403f5){const bdy_0x3399e2=
             var TempMessage = allMessageGp6;
             if (strAllNotify)
                 allMessageGp6 = strAllNotify + `\n` + allMessageGp6;
-            await notify.sendNotify(`${$.name}#4`, `${allMessageGp6}`, {
+            await notify.sendNotify(`${$.name}#6`, `${allMessageGp6}`, {
                 url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
             }, undefined, TempMessage)
             await $.wait(10 * 1000);
@@ -667,7 +667,7 @@ const bdy_0x4d8a20=bdy_0x467d;(function(_0x90c948,_0x9403f5){const bdy_0x3399e2=
             var TempMessage = allMessageGp7;
             if (strAllNotify)
                 allMessageGp7 = strAllNotify + `\n` + allMessageGp7;
-            await notify.sendNotify(`${$.name}#4`, `${allMessageGp7}`, {
+            await notify.sendNotify(`${$.name}#7`, `${allMessageGp7}`, {
                 url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
             }, undefined, TempMessage)
             await $.wait(10 * 1000);
@@ -676,7 +676,7 @@ const bdy_0x4d8a20=bdy_0x467d;(function(_0x90c948,_0x9403f5){const bdy_0x3399e2=
             var TempMessage = allMessageGp8;
             if (strAllNotify)
                 allMessageGp8 = strAllNotify + `\n` + allMessageGp8;
-            await notify.sendNotify(`${$.name}#4`, `${allMessageGp8}`, {
+            await notify.sendNotify(`${$.name}#8`, `${allMessageGp8}`, {
                 url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
             }, undefined, TempMessage)
             await $.wait(10 * 1000);
@@ -822,18 +822,18 @@ async function showMsg() {
     if (MessageUserGp4) {
         userIndex4 = MessageUserGp4.findIndex((item) => item === $.pt_pin);
     }
-	if (MessageUserGp5) {
-		userIndex5 = MessageUserGp5.findIndex((item) => item === $.pt_pin);
-	}
-	if (MessageUserGp6) {
-		userIndex6 = MessageUserGp6.findIndex((item) => item === $.pt_pin);
-	}
-	if (MessageUserGp7) {
-		userIndex7 = MessageUserGp7.findIndex((item) => item === $.pt_pin);
-	}
-	if (MessageUserGp8) {
-		userIndex8 = MessageUserGp8.findIndex((item) => item === $.pt_pin);
-	}
+    if (MessageUserGp5) {
+	userIndex5 = MessageUserGp5.findIndex((item) => item === $.pt_pin);
+    }
+    if (MessageUserGp6) {
+	userIndex6 = MessageUserGp6.findIndex((item) => item === $.pt_pin);
+    }
+    if (MessageUserGp7) {
+	userIndex7 = MessageUserGp7.findIndex((item) => item === $.pt_pin);
+    }
+    if (MessageUserGp8) {
+	userIndex8 = MessageUserGp8.findIndex((item) => item === $.pt_pin);
+    }
 	
     if (userIndex2 != -1) {
         IndexGp2 += 1;
