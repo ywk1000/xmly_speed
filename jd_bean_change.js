@@ -175,7 +175,7 @@ if(WP_APP_TOKEN_ONE)
 else
 	console.log(`检测到未配置Wxpusher的Token，禁用一对一推送...`);
 
-let jdSignUrl = 'https://api.nolanstore.cc/sign'
+let jdSignUrl = 'http://10.8.38.3：60800/sign'
 if (process.env.SIGNURL)
 	jdSignUrl = process.env.SIGNURL;
 
