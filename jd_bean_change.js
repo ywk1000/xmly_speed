@@ -26,7 +26,7 @@ let startDate="";
 let endDate="";
 try {
     const moment = require("moment");
-    yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD');
+    昨天 = moment().subtract(1, 'days').format('YYYY-MM-DD');
     TodayDate = moment().format("YYYY-MM-DD");
     startDate = moment().startOf("month").format("YYYY_MM");
     endDate = moment().endOf("month").format("YYYY-MM-DD");
@@ -175,7 +175,7 @@ if(WP_APP_TOKEN_ONE)
 else
 	console.log(`检测到未配置Wxpusher的Token，禁用一对一推送...`);
 
-let jdSignUrl = 'http://10.8.38.3：60800/sign'
+let jdSignUrl = 'http://10.8.38.3:60800/sign'
 if (process.env.SIGNURL)
 	jdSignUrl = process.env.SIGNURL;
 
