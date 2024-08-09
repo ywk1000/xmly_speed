@@ -257,8 +257,8 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
             TempOErrorMessage = '';
 
             console.log(`开始检测【京东账号${$.index}】${$.UserName2} ....\n`);
-            if (MessageUserGp4) {
-                userIndex4 = MessageUserGp4.findIndex((item) => item === $.UserName);
+            if (MessageUserGp10) {
+                userIndex10 = MessageUserGp10.findIndex((item) => item === $.UserName);
             }
             if (MessageUserGp2) {
 
@@ -267,6 +267,34 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
             if (MessageUserGp3) {
 
                 userIndex3 = MessageUserGp3.findIndex((item) => item === $.UserName);
+            }
+            if (MessageUserGp4) {
+
+                userIndex4 = MessageUserGp4.findIndex((item) => item === $.UserName);
+            }
+            if (MessageUserGp5) {
+
+                userIndex5 = MessageUserGp5.findIndex((item) => item === $.UserName);
+            }
+            if (MessageUserGp6) {
+
+                userIndex6 = MessageUserGp6.findIndex((item) => item === $.UserName);
+            }
+            if (MessageUserGp7) {
+
+                userIndex7 = MessageUserGp7.findIndex((item) => item === $.UserName);
+            }
+            if (MessageUserGp8) {
+
+                userIndex8 = MessageUserGp8.findIndex((item) => item === $.UserName);
+            }
+            if (MessageUserGp9) {
+
+                userIndex9 = MessageUserGp9.findIndex((item) => item === $.UserName);
+            }
+            if (MessageUserGp10) {
+
+                userIndex10 = MessageUserGp10.findIndex((item) => item === $.UserName);
             }
 
             if (userIndex2 != -1) {
@@ -314,7 +342,7 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 IndexGp10 += 1;
                 ReturnMessageTitle = `【账号${IndexGp10}🆔】${$.UserName2}`;
             }
-            if (userIndex4 == -1 && userIndex2 == -1 && userIndex3 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1 && userIndex8 == -1 && userIndex9 == -1 && userIndex10 == -1) {
+            if (userIndex10 == -1 && userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1 && userIndex8 == -1 && userIndex9 == -1 && userIndex10 == -1) {
                 console.log(`账号没有分组`);
                 IndexAll += 1;
                 ReturnMessageTitle = `【账号${IndexAll}🆔】${$.UserName2}`;
@@ -471,7 +499,7 @@ if ($.isNode() && process.env.CHECKCK_ALLNOTIFY) {
                 OErrorMessageGp10 += TempOErrorMessage;
             }
 			
-            if (userIndex4 == -1 && userIndex2 == -1 && userIndex3 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1 && userIndex8 == -1 && userIndex9 == -1 && userIndex10 == -1) {
+            if (userIndex10 == -1 && userIndex2 == -1 && userIndex3 == -1 && userIndex4 == -1 && userIndex5 == -1 && userIndex6 == -1 && userIndex7 == -1 && userIndex8 == -1 && userIndex9 == -1 && userIndex10 == -1) {
                 ErrorMessage += TempErrorMessage;
                 SuccessMessage += TempSuccessMessage;
                 DisableMessage += TempDisableMessage;
